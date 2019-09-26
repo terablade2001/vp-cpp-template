@@ -1,0 +1,18 @@
+[submodule "ExtLibs/CCEXP"]
+	path = ExtLibs/CCEXP
+	url = https://github.com/terablade2001/CCEXP.git
+[submodule "ExtLibs/MVECTOR"]
+	path = ExtLibs/MVECTOR
+	url = https://github.com/terablade2001/MVECTOR.git
+[submodule "ExtLibs/CECS"]
+	path = ExtLibs/CECS
+	url = https://github.com/terablade2001/CECS.git
+[submodule "ExtLibs/vkp_Config"]
+	path = ExtLibs/vkp_Config
+	url = https://github.com/terablade2001/vkp_Config.git
+[submodule "ExtLibs/vkpLibs"]
+	path = ExtLibs/vkpLibs
+	url = https://github.com/terablade2001/vkpLibs
+[submodule "ExtLibs/PThreadPool"]
+	path = ExtLibs/PThreadPool
+	url = https://github.com/terablade2001/PThreadPool.git
