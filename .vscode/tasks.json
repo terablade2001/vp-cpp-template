@@ -16,6 +16,34 @@
       "command": "cd BuildSystems\\my-win64 && make-build.cmd",
       "group": "build",
       "problemMatcher": []
+    },
+    {
+      "label": "my-win64:: Execute main",
+      "type": "shell",
+      "command": "cd BuildSystems\\my-win64 && test-main.cmd",
+      "group": "build",
+      "problemMatcher": []
+    }
+    {
+      "label": "my-ubuntu64:: CMAKE",
+      "type": "shell",
+      "command": "cd BuildSystems/my-ubuntu64 && ./cmake-build.sh",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "my-ubuntu64:: Build",
+      "type": "shell",
+      "command": "cd BuildSystems/my-ubuntu64 && ./make-build.sh",
+      "group": "build",
+      "problemMatcher": []
+    }
+    {
+      "label": "my-ubuntu64:: Execute main",
+      "type": "shell",
+      "command": "cd BuildSystems/my-ubuntu64 && ./test-main.sh",
+      "group": "build",
+      "problemMatcher": []
     }
   ]
 }

@@ -22,8 +22,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import sys
+FF = (os.path.dirname(os.path.realpath(__file__))).replace("\\","/")+"/"
+sys.path.append(FF+'../ExtLibs/CCEXP/python/')
+from ccexp import *
+
 import BuildVersion as BV
 
 BV.BuildVersion("../BuildVersion/BuildVersion.hpp")
 
 print("Version: %s" %(BV.version(1)))
+
+
+d = CCEXPRead("../workdir/test-exported.ccexp",1)
+
+print("Message:")
+print(d["Message"].Data)
+print("Task-id:")
+print(d["task-id"].Data)

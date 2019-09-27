@@ -36,8 +36,8 @@ file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/*.cpp"
-		"${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src/*.cpp"
-		"${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src/*.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
 )
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})
