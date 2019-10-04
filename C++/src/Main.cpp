@@ -21,8 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "include/Main.hpp"
+#include <Main.hpp>
 #include <unistd.h>
+#include "../../BuildVersion/BuildVersion.hpp"
+#include <vkpBuildVersioner.hpp>
 
 using namespace std;
 using namespace vkp;

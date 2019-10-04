@@ -1,1 +1,1 @@
-#define VERSION_NUMBER (2.0)
+#define VERSION_NUMBER (3.0)

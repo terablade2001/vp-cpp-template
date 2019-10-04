@@ -21,7 +21,7 @@
       "label": "my-win64:: Execute main",
       "type": "shell",
       "command": "cd BuildSystems\\my-win64 && test-main.cmd",
-      "group": "build",
+      "group": "test",
       "problemMatcher": []
     }
     {
@@ -42,7 +42,7 @@
       "label": "my-ubuntu64:: Execute main",
       "type": "shell",
       "command": "cd BuildSystems/my-ubuntu64 && ./test-main.sh",
-      "group": "build",
+      "group": "test",
       "problemMatcher": []
     }
   ]
