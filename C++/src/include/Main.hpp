@@ -1,11 +1,8 @@
 #ifndef __MAIN_CPP__HEADERFILE__
 #define __MAIN_CPP__HEADERFILE__
 
-#include <CCEXP.hpp>
-#include <CECS.hpp>
-#include <vkpConfigReader.hpp>
-#include <vkpProgressBar.hpp>
-#include <PThreadPool.hpp>
-#include <iostream>
+#include <vp-cpp-template.hpp>
+
+#include <Example.hpp>
 
 #endif
