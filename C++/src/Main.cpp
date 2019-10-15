@@ -31,7 +31,7 @@ static CECS __ECSOBJ__("Main","CECS::Project");
 
 int main(int argc, char** argv) {
 	// Set ECS display sections, and clear default obj's errors (optional)
-	_ECSFORMAT(1,0,0,1,1,1) __ECSOBJ__.clear();
+	_ECSFORMAT(1,0,0,1,1,1,1,1) __ECSOBJ__.clear();
 	// Enable all 32 Signals in case of CECSDEBUG flag.
 	for (int i=0; i < 32; i++) _SETSIGNAL(i)
 
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
 	cout << "---------------- Program completed ---------------------" << endl;
 	} catch(std::exception &e) {
-  	std::cout<< std::endl<<"(*) Exception occured: "<< std::endl << "  --> " << e.what() << std::endl;
+		std::cout<< std::endl<<"(*) Exception occured: "<< std::endl << e.what() << std::endl;
 	}
 	return 0;
 }
