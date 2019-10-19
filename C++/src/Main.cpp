@@ -27,7 +27,7 @@
 
 // Versioning and CECS
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
-static CECS __ECSOBJ__("Main","CECS::Project");
+CECS_MAIN_MODULE("Main","CECS::Project")
 
 int main(int argc, char** argv) {
 	// Set ECS display sections, and clear default obj's errors (optional)

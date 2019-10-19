@@ -25,7 +25,7 @@
 #include <unistd.h>
 
 //CECS / CCEXP / vkp_Config variables.
-static CECS __ECSOBJ__("Example");
+CECS_MODULE("Example")
 static CCEXP::CCEXP DBG;
 static cfg_type cfg_data;
 
