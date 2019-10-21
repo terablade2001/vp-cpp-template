@@ -58,6 +58,13 @@ void* Thread_Execute(void* _data) {
 int Example(int argc, char** argv) {
   _ERRI(2!=argc,"One configuration file is required as input argument! Got (%i)", argc)
 
+	// Define our own thread sync system for CECS.
+	static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
+	*(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
+	CECS_SETFUNC_LOCK( [](){ pthread_mutex_lock(*(pthread_mutex_t**)CECS_MUTEXPTR);} );
+	CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
+	_CHECKRI_
+
   // Load config file
   string cfgFilePath(argv[1]);
   _ERRI(cfg_LoadFile(cfgFilePath.c_str(), cfg_data),
