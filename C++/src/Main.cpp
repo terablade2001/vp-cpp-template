@@ -46,7 +46,11 @@ int main(int argc, char** argv) {
 
 	cout << "---------------- Program completed ---------------------" << endl;
 	} catch(std::exception &e) {
-		std::cout<< std::endl<<"(*) Exception occured: "<< std::endl << e.what() << std::endl;
+		string eColorStart; string eColorFix;
+
+		// Enable the following line for colored error output
+		// eColorStart = string("\033[1;36m"); eColorFix = string("\033[m");
+		std::cerr<< std::endl<<"(*) Exception occured: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
 	}
 	return 0;
 }
