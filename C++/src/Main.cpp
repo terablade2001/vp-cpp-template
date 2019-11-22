@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 
 		// Enable the following line for colored error output
 		// eColorStart = string("\033[1;36m"); eColorFix = string("\033[m");
-		std::cerr<< std::endl<<"(*) Exception occured: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
+		std::cerr<< std::endl<<"(*) Exception occurred: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
 	}
 	return 0;
 }
