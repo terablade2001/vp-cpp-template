@@ -56,6 +56,9 @@ void* Thread_Execute(void* _data) {
 
 
 int Example(int argc, char** argv) {
+  dbg_c(0,argc==2,"Entered Example (with argc == 2)...")
+  dbg_c(1,argc==2,"Entered Example (with argc == 2) (dbg OR flag 0b10)...")
+  dbg_c(0,argc==1,"Entered Example (with argc == 1)...")
   _ERRI(2!=argc,"One configuration file is required as input argument! Got (%i)", argc)
 
 	// Define our own thread sync system for CECS.

@@ -41,6 +41,7 @@ int main(int argc, char** argv) {
 	try {
 		
 		// Run Example() function of the demo!
+		dbg_(63,"Debugging: argc = " << argc)
 		_ERRT(Example(argc, argv),"Failed to run \"Example()\" function!")
 
 
