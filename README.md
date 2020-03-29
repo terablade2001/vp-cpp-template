@@ -1,3 +1,44 @@
+# Quick **installation**
+
+**From project's root folder...**
+
+## Windows
+```bash
+### WITH WINDOWS GIT-BASH SOFTWARE ###
+# Clone and detach project template for further development.
+git clone https://github.com/terablade2001/vp-cpp-template.git
+cd vp-cpp-template/BuildSystems/my-win64
+./detachProjectFromGit.sh
+
+### WITH WINDOWS COMMAND PROMPT ###
+# Build the test project
+cd BuildSystems/my-win64
+./cmake-build.cmd
+./make-build.cmd
+./test-main.cmd
+
+# Python 3 reading produced CCEXP Test
+cd ../../python
+python Test.py
+```
+## Ubuntu (*with git support*)
+```bash
+# Clone and detach project template for further development.
+git clone https://github.com/terablade2001/vp-cpp-template.git
+cd vp-cpp-template/BuildSystems/my-ubuntu
+./detachProjectFromGit.sh
+
+# Build the test project
+cd BuildSystems/my-ubuntu
+./cmake-build.sh
+./make-build.sh
+./test-main.sh
+
+# Python 3 reading produced CCEXP Test
+cd ../../python
+python Test.py
+```
+
 # **What** is <u>vp-cpp-template</u>?
 
 It's a C++ & Python framework which includes my most important libraries (CECS / CCEXP / 

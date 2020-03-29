@@ -5,14 +5,9 @@ set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 
-if (MINGW)
-	set(CXX_FLAGS "-std=c++11 -Wall -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
-	set(C_FLAGS "-Wall -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
-endif(MINGW)
-if (UNIX)
-	set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
-	set(C_FLAGS "-Wall -Wno-unused-result -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
-endif(UNIX)
+
+set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS")
+set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS")
 
 
 set(CMAKE_CONFIGURATION_TYPES "Release")

@@ -5,5 +5,5 @@ cd ../../BuildVersion
 ./UpdateBuildVersion
 cd "$CURRP/../../C++/build"
 make -j
-# ./ProtobufModifier
+mv vp-cpp-template "$CURRP/../../workdir/"
 cd "$CURRP"

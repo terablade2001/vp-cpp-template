@@ -1,5 +1,5 @@
 #!/bin/sh
-cd ..
+cd ../..
 git submodule init
 git submodule update --remote --recursive
 rm -rf .gitmodules
@@ -9,6 +9,7 @@ git rm -rf --cached ExtLibs
 rm -rf .git/modules/ExtLibs
 cd ExtLibs
 rm -rf .git
+rm -rf .gitmodules
 cd ..
 git remote remove origin
 git add --all
