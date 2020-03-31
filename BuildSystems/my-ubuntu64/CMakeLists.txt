@@ -5,8 +5,8 @@ set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 
-set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS")
-set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS")
+set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
+set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
 
 
 set(CMAKE_CONFIGURATION_TYPES "Release")
@@ -24,6 +24,7 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpBuildVersioner/C++
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer
 )
 file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
@@ -33,6 +34,7 @@ file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer/*.cpp"
 )
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})

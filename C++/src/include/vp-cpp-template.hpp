@@ -6,6 +6,7 @@
 #include <vkpConfigReader.hpp>
 #include <vkpProgressBar.hpp>
 #include <PThreadPool.hpp>
+#include <vkpCircularBuffer.hpp>
 
 using namespace std;
 using namespace vkp;

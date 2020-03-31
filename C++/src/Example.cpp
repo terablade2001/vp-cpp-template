@@ -29,6 +29,10 @@ CECS_MODULE("Example")
 static CCEXP::CCEXP DBG;
 static cfg_type cfg_data;
 
+// Make a circular buffer with 2 cells
+static vkpCircularBuffer<int> circBuff(std::string("CircBuff"), 2);
+static int64_t circBuffvalue = -100; // Initialize value with -100
+
 // Threading setup (PThreadPool)
 #define MAX_THREADS (4)
 #define MAX_TASKS (40)
@@ -44,6 +48,8 @@ void* Thread_Execute(void* _data) {
 	int task_id = data->task_id;
 	pthread_mutex_lock(&q_mtx);
 		_ERRO(vkpPB.Update(progressCnt++),{ pthread_mutex_unlock(&q_mtx); return NULL; },"ProgressBar failed to update")
+    // Each time add the value to the circular buffer and increase by 1 the index.
+    _ERRO(circBuff.setMove(circBuffvalue++, 1),{ pthread_mutex_unlock(&q_mtx); return NULL; },"Failed to update the circular buffer")
 		usleep(50000);
 		CCEXP::AddVal<int>(DBG,"task-id",task_id);
 		 _CHECKRO_({ pthread_mutex_unlock(&q_mtx); return NULL; } )
@@ -91,9 +97,11 @@ int Example(int argc, char** argv) {
   CCEXP::Initialize(DBG,ExportTestFile.c_str());
   CCEXP::AddTable<char>(DBG,"Message","char");
   CCEXP::AddTable<int>(DBG,"task-id","int32");
-  
+
   string msg("vp-cpp-template test file!");
   CCEXP::AddRow<char>(DBG,"Message",const_cast<char*>(msg.c_str()),msg.size());
+
+  _ERRI(circBuff.allSetTo(0),"Failed to initialize the circular Buffer");
 
   cout << "Progress: ";
   vkpPB.Start(); progressCnt = 0;
@@ -112,6 +120,9 @@ int Example(int argc, char** argv) {
   // Store results.
   CCEXP::StoreData(DBG); _CHECKRI_
   CCEXP::Reset(DBG); _CHECKRI_
+
+  // Display the results of the circlular buffer cells.
+  dbg_(63,"CircBuffValues: [0]:"<<circBuff.get(0)<<", [1]:"<<circBuff.get(1))
 
   _ERRI(1,"[EXAMPLE forced Error] -> To see how CECS works! ;)")
   return 0;
