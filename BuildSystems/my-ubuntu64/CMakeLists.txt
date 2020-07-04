@@ -5,8 +5,8 @@ set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 
-set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
-set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2")
+set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
+set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
 
 
 set(CMAKE_CONFIGURATION_TYPES "Release")
