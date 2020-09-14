@@ -7,6 +7,7 @@
 #include <vkpProgressBar.hpp>
 #include <PThreadPool.hpp>
 #include <vkpCircularBuffer.hpp>
+#include <vkpTimer.hpp>
 
 using namespace std;
 using namespace vkp;

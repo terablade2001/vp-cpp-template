@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) 2017 - 2019 Vasileios Kon. Pothos (terablade2001)
+// Copyright (c) 2017 - 2020 Vasileios Kon. Pothos (terablade2001)
 // https://github.com/terablade2001/vp-cpp-template
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -67,6 +67,14 @@ int Example(int argc, char** argv) {
   dbg_c(0,argc==1,"Entered Example (with argc == 1)...")
   _ERRI(2!=argc,"One configuration file is required as input argument! Got (%i)", argc)
 
+  // Define a Timers map
+  vkpTimersMap perfTimers("Example Timers");
+  perfTimers.addTimer("Loading configuration");
+  perfTimers.addTimer("Loading and setup");
+  perfTimers.addTimer("Threading time");
+  // Define a simple timer.
+  vkpTimer storingTimer("storing and cleaning ccexp");
+
 	// Define our own thread sync system for CECS.
 	static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
 	*(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
@@ -74,55 +82,77 @@ int Example(int argc, char** argv) {
 	CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
 	_CHECKRI_
 
-  // Load config file
-  string cfgFilePath(argv[1]);
-  _ERRI(cfg_LoadFile(cfgFilePath.c_str(), cfg_data),
-    "Failed to load config file [%s]", cfgFilePath.c_str());
 
-  // Load and check Configuration file
-  std::vector<std::string> CheckParamList = {"ExportTestFile"};
-  std::string NotExistingParams;
-  int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
-  _ERRSTR(r,{
-    ss << "The following required parameters were not found in configuration file: \n >> [";
-    ss << NotExistingParams +"]";
-  })
-  _ERRI(r,"Failed to initialize from Configuration file...")
+  { vkpTimer& T = perfTimers.getTimer("Loading configuration"); T.start();
+    // Load config file
+    string cfgFilePath(argv[1]);
+    _ERRI(cfg_LoadFile(cfgFilePath.c_str(), cfg_data),
+      "Failed to load config file [%s]", cfgFilePath.c_str());
 
-  // Load params from the config file
+    // Load and check Configuration file
+    std::vector<std::string> CheckParamList = {"ExportTestFile"};
+    std::string NotExistingParams;
+    int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
+    _ERRSTR(r,{
+      ss << "The following required parameters were not found in configuration file: \n >> [";
+      ss << NotExistingParams +"]";
+    })
+    _ERRI(r,"Failed to initialize from Configuration file...")
+    T.stop();
+  }
+
   string ExportTestFile;
-  cfg_GetParam(cfg_data, "ExportTestFile", ExportTestFile);
+  { vkpTimer& T = perfTimers.getTimer("Loading and setup"); T.start();
+    // Load params from the config file
+    cfg_GetParam(cfg_data, "ExportTestFile", ExportTestFile);
 
-  // Create the CCEXP object for recording
-  CCEXP::Initialize(DBG,ExportTestFile.c_str());
-  CCEXP::AddTable<char>(DBG,"Message","char");
-  CCEXP::AddTable<int>(DBG,"task-id","int32");
+    // Create the CCEXP object for recording
+    CCEXP::Initialize(DBG,ExportTestFile.c_str());
+    CCEXP::AddTable<char>(DBG,"Message","char");
+    CCEXP::AddTable<int>(DBG,"task-id","int32");
 
-  string msg("vp-cpp-template test file!");
-  CCEXP::AddRow<char>(DBG,"Message",const_cast<char*>(msg.c_str()),msg.size());
+    string msg("vp-cpp-template test file!");
+    CCEXP::AddRow<char>(DBG,"Message",const_cast<char*>(msg.c_str()),msg.size());
 
-  _ERRI(circBuff.allSetTo(0),"Failed to initialize the circular Buffer");
+    _ERRI(circBuff.allSetTo(0),"Failed to initialize the circular Buffer");
+    T.stop();
+  }
 
-  cout << "Progress: ";
-  vkpPB.Start(); progressCnt = 0;
-  // Run the threaded code.
-  PThreadPool TPool;
-  TPool.Initialize(Thread_Execute, MAX_THREADS, -1);
-  for (int tid = 0; tid < MAX_TASKS; tid++)
-    Thread_Data[tid].task_id = tid;
-  for (int tid = MAX_TASKS-1; tid >= 0; tid--)
-    TPool.AddTask(&Thread_Data[tid]);
-  TPool.Wait();
-  TPool.Shutdown();
-  cout << endl;
-  _CHECKRI_
+  { vkpTimer& T = perfTimers.getTimer("Threading time"); T.start();
+    cout << "Progress: ";
+    vkpPB.Start(); progressCnt = 0;
+    // Run the threaded code.
+    PThreadPool TPool;
+    TPool.Initialize(Thread_Execute, MAX_THREADS, -1);
+    for (int tid = 0; tid < MAX_TASKS; tid++)
+      Thread_Data[tid].task_id = tid;
+    for (int tid = MAX_TASKS-1; tid >= 0; tid--)
+      TPool.AddTask(&Thread_Data[tid]);
+    TPool.Wait();
+    TPool.Shutdown();
+    cout << endl;
+    _CHECKRI_
+    T.stop();
+  }
 
+  storingTimer.start();
   // Store results.
   CCEXP::StoreData(DBG); _CHECKRI_
   CCEXP::Reset(DBG); _CHECKRI_
+  storingTimer.stop();
 
   // Display the results of the circlular buffer cells.
   dbg_(63,"CircBuffValues: [0]:"<<circBuff.get(0)<<", [1]:"<<circBuff.get(1))
+
+  // Display timers info
+  cout << perfTimers.str() << endl;
+  cout << storingTimer.str() << endl;
+
+  // In release mode, users can disable timers.
+  perfTimers.enabled=false;
+  storingTimer.enabled=false;
+  cout << perfTimers.str() << endl;
+  cout << storingTimer.str() << endl;
 
   _ERRI(1,"[EXAMPLE forced Error] -> To see how CECS works! ;)")
   return 0;

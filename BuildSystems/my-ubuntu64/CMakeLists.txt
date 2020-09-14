@@ -25,6 +25,7 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpBuildVersioner/C++
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer
 )
 file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
@@ -35,6 +36,7 @@ file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer/*.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
 )
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})
