@@ -6,8 +6,8 @@ set(PROJECTNAME "vp-cpp-template")
 project(${PROJECTNAME})
 
 
-set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
-set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
+set(CXX_FLAGS "-std=c++11 -Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
+set(C_FLAGS "-Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
 
 
 set(CMAKE_CONFIGURATION_TYPES "Release")
@@ -17,7 +17,7 @@ set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/src/include/
+  ${CMAKE_CURRENT_LIST_DIR}/include/
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/include

@@ -22,12 +22,11 @@
 // SOFTWARE.
 
 #include <Example.hpp>
-#include <unistd.h>
 
 //CECS / CCEXP / vkp_Config variables.
 CECS_MODULE("Example")
+
 static CCEXP::CCEXP DBG;
-static cfg_type cfg_data;
 
 // Make a circular buffer with 2 cells
 static vkpCircularBuffer<int> circBuff(std::string("CircBuff"), 2);
@@ -40,71 +39,75 @@ static vkpProgressBar vkpPB("[","]","=",">",0,MAX_TASKS,20);
 static int progressCnt = 0;
 static pthread_mutex_t q_mtx = PTHREAD_MUTEX_INITIALIZER;
 typedef struct SThread_data {
-	int task_id;
+  int task_id;
 } SThread_data;
 static SThread_data Thread_Data[MAX_TASKS];
 void* Thread_Execute(void* _data) {
-	SThread_data* data = (SThread_data*)_data;
-	int task_id = data->task_id;
-	pthread_mutex_lock(&q_mtx);
-		_ERRO(vkpPB.Update(progressCnt++),{ pthread_mutex_unlock(&q_mtx); return NULL; },"ProgressBar failed to update")
+  SThread_data* data = (SThread_data*)_data;
+  int task_id = data->task_id;
+  pthread_mutex_lock(&q_mtx);
+    _ERRO(vkpPB.Update(progressCnt++),{ pthread_mutex_unlock(&q_mtx); return NULL; },"ProgressBar failed to update")
     // Each time add the value to the circular buffer and increase by 1 the index.
     _ERRO(circBuff.setMove(circBuffvalue++, 1),{ pthread_mutex_unlock(&q_mtx); return NULL; },"Failed to update the circular buffer")
-		usleep(50000);
-		CCEXP::AddVal<int>(DBG,"task-id",task_id);
-		 _CHECKRO_({ pthread_mutex_unlock(&q_mtx); return NULL; } )
-	pthread_mutex_unlock(&q_mtx);
-	return NULL;
+    usleep(50000);
+    CCEXP::AddVal<int>(DBG,"task-id",task_id);
+     _CHECKRO_({ pthread_mutex_unlock(&q_mtx); return NULL; } )
+  pthread_mutex_unlock(&q_mtx);
+  return NULL;
+}
+
+
+
+static string ExportTestFile;
+
+int Example_LoadConfigParameters(string&& file) {
+  _ERRINF(1,"config file: [%s]", file.c_str())
+  cfg_type cfg_data;
+  _ERRI(0!=cfg_LoadFile(file.c_str(), cfg_data),"Failed to load config file")
+  std::vector<std::string> CheckParamList = {
+    "ExportTestFile"
+  };
+  std::string NotExistingParams;
+  int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
+  _ERRSTR(r!=0,{ ss << "The following parameters were not found: \n" << "[" << NotExistingParams << "]"; })
+  _ERRI(r!=0,"Missing parameter in configuration file.")
+  _ERRI(0!=cfg_GetParam(cfg_data, "ExportTestFile", ExportTestFile),"Failed to process parameters [ExportTestFile]")
+  _ECSCLS_
+  return 0;
 }
 
 
 
 
 
-int Example(int argc, char** argv) {
-  dbg_c(0,argc==2,"Entered Example (with argc == 2)...")
-  dbg_c(1,argc==2,"Entered Example (with argc == 2) (dbg OR flag 0b10)...")
-  dbg_c(0,argc==1,"Entered Example (with argc == 1)...")
-  _ERRI(2!=argc,"One configuration file is required as input argument! Got (%i)", argc)
 
+int Example(int argc, char** argv) {
+  dbg_(63,"Example() called")
   // Define a Timers map
   vkpTimersMap perfTimers("Example Timers");
-  perfTimers.addTimer("Loading configuration");
-  perfTimers.addTimer("Loading and setup");
-  perfTimers.addTimer("Threading time");
+  auto& T00 = perfTimers.addTimer("00 - Loading configuration");
+  perfTimers.addTimer("01 - Loading and setup");
+  perfTimers.addTimer("02 - Threading time");
   // Define a simple timer.
   vkpTimer storingTimer("storing and cleaning ccexp");
 
-	// Define our own thread sync system for CECS.
-	static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
-	*(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
-	CECS_SETFUNC_LOCK( [](){ pthread_mutex_lock(*(pthread_mutex_t**)CECS_MUTEXPTR);} );
-	CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
-	_CHECKRI_
+  T00.start();
+    _ERRI(0!=Example_LoadConfigParameters(string(argv[1])),"Failed to load config file [%s]",argv[1]);
+  T00.stop();
 
+  // Condition debug statements.
+  dbg_c(0,argc==2,"Entered Example (with argc == 2)...")
+  dbg_c(1,argc==2,"Entered Example (with argc == 2) (dbg OR flag 0b10)...")
+  dbg_c(0,argc==1,"Entered Example (with argc == 1)...")
 
-  { vkpTimer& T = perfTimers.getTimer("Loading configuration"); T.start();
-    // Load config file
-    string cfgFilePath(argv[1]);
-    _ERRI(cfg_LoadFile(cfgFilePath.c_str(), cfg_data),
-      "Failed to load config file [%s]", cfgFilePath.c_str());
+  // Define our own thread sync system for CECS.
+  static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
+  *(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
+  CECS_SETFUNC_LOCK( [](){ pthread_mutex_lock(*(pthread_mutex_t**)CECS_MUTEXPTR);} );
+  CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
+  _CHECKRI_
 
-    // Load and check Configuration file
-    std::vector<std::string> CheckParamList = {"ExportTestFile"};
-    std::string NotExistingParams;
-    int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
-    _ERRSTR(r,{
-      ss << "The following required parameters were not found in configuration file: \n >> [";
-      ss << NotExistingParams +"]";
-    })
-    _ERRI(r,"Failed to initialize from Configuration file...")
-    T.stop();
-  }
-
-  string ExportTestFile;
-  { vkpTimer& T = perfTimers.getTimer("Loading and setup"); T.start();
-    // Load params from the config file
-    cfg_GetParam(cfg_data, "ExportTestFile", ExportTestFile);
+  { vkpTimer& T = perfTimers.getTimer("01 - Loading and setup"); T.start();
 
     // Create the CCEXP object for recording
     CCEXP::Initialize(DBG,ExportTestFile.c_str());
@@ -118,7 +121,7 @@ int Example(int argc, char** argv) {
     T.stop();
   }
 
-  { vkpTimer& T = perfTimers.getTimer("Threading time"); T.start();
+  { vkpTimer& T = perfTimers.getTimer("02 - Threading time"); T.start();
     cout << "Progress: ";
     vkpPB.Start(); progressCnt = 0;
     // Run the threaded code.

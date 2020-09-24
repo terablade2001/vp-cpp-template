@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.m": "matlab",
+    "*.proto3": "proto3",
+    "*.config": "makefile",
+    "iostream": "cpp"
+  }
+}

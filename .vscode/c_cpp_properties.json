@@ -3,12 +3,23 @@
       {
           "name": "Win32",
           "includePath": [
-              "${workspaceFolder}/**"
+              "${workspaceFolder}/**",
+              "${workspaceFolder}/C++/include/**",
+              "${workspaceFolder}/ExtLibs/CCEXP/C++/src/include/**",
+              "${workspaceFolder}/ExtLibs/CECS/C++/src/include/**",
+              "${workspaceFolder}/ExtLibs/MVECTOR/src/include/**",
+              "${workspaceFolder}/ExtLibs/PThreadPool/C/src/include/**",
+              "${workspaceFolder}/ExtLibs/vkp_Config/src/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpBuildVersioner/C++/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpProgressBar/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpCircularBuffer/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpTimer/**"
           ],
           "defines": [
               "_DEBUG",
               "UNICODE",
-              "_UNICODE"
+              "_UNICODE",
+              "VKP_USE_PTHREAD_POOL"
           ],
           "intelliSenseMode": "gcc-x64",
           "compilerPath": "c:/TDM-GCC-64/bin/g++.exe",
