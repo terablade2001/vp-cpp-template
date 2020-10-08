@@ -22,22 +22,22 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpBuildVersioner/C++
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpConfigReader/src
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer
 )
 file(GLOB CXX_SRCS
-    "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkp_Config/src/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer/*.cpp"
-    "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpConfigReader/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
 )
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})

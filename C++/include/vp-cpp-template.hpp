@@ -3,14 +3,10 @@
 
 #include <CCEXP.hpp>
 #include <CECS.hpp>
-#include <vkpConfigReader.hpp>
-#include <vkpProgressBar.hpp>
 #include <PThreadPool.hpp>
 #include <vkpCircularBuffer.hpp>
+#include <vkpConfigReader.hpp>
+#include <vkpProgressBar.hpp>
 #include <vkpTimer.hpp>
-
-using namespace std;
-using namespace vkp;
-using namespace vkp_Config;
 
 #endif

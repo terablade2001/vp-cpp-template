@@ -7,9 +7,6 @@
 [submodule "ExtLibs/CECS"]
 	path = ExtLibs/CECS
 	url = https://github.com/terablade2001/CECS.git
-[submodule "ExtLibs/vkp_Config"]
-	path = ExtLibs/vkp_Config
-	url = https://github.com/terablade2001/vkp_Config.git
 [submodule "ExtLibs/vkpLibs"]
 	path = ExtLibs/vkpLibs
 	url = https://github.com/terablade2001/vkpLibs

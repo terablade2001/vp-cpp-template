@@ -23,6 +23,10 @@
 
 #include <Example.hpp>
 
+using namespace std;
+using namespace vkp;
+using namespace vkpConfigReader;
+
 //CECS / CCEXP / vkp_Config variables.
 CECS_MODULE("Example")
 

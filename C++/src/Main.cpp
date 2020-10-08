@@ -26,6 +26,10 @@
 #include "../../BuildVersion/BuildVersion.hpp"
 #include <vkpBuildVersioner.hpp>
 
+using namespace std;
+using namespace vkp;
+using namespace vkpConfigReader;
+
 // Versioning and CECS
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
