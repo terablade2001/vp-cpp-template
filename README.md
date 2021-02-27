@@ -1,3 +1,7 @@
+For further documentation a new **Documentation.odt** file (LibreOffice) is included.
+
+**Warning**: The following notes may not be valid after (0.026) version...
+
 # Quick **installation**
 
 **From project's root folder...**
