@@ -1,1 +1,1 @@
-#define VERSION_NUMBER (25.0)
+#define VERSION_NUMBER (26.0)

@@ -18,12 +18,19 @@
       "problemMatcher": []
     },
     {
-      "label": "my-win64:: Execute main",
+      "label": "my-win64:: CMAKE [ExampleCAPI]",
       "type": "shell",
-      "command": "cd BuildSystems\\my-win64 && test-main.cmd",
-      "group": "test",
+      "command": "cd BuildSystems\\my-win64\\Libs\\ExampleCAPI && cmake-build.cmd",
+      "group": "build",
       "problemMatcher": []
-    }
+    },
+    {
+      "label": "my-win64:: Build [ExampleCAPI]",
+      "type": "shell",
+      "command": "cd BuildSystems\\my-win64\\Libs\\ExampleCAPI && make-build.cmd",
+      "group": "build",
+      "problemMatcher": []
+    },
     {
       "label": "my-ubuntu64:: CMAKE",
       "type": "shell",
@@ -36,13 +43,6 @@
       "type": "shell",
       "command": "cd BuildSystems/my-ubuntu64 && ./make-build.sh",
       "group": "build",
-      "problemMatcher": []
-    }
-    {
-      "label": "my-ubuntu64:: Execute main",
-      "type": "shell",
-      "command": "cd BuildSystems/my-ubuntu64 && ./test-main.sh",
-      "group": "test",
       "problemMatcher": []
     }
   ]

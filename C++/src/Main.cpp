@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 #include <Example.hpp>
+#include <TestExampleCAPI.hpp>
 
 #include "../../BuildVersion/BuildVersion.hpp"
 #include <vkpBuildVersioner.hpp>
@@ -34,11 +35,9 @@ using namespace vkpConfigReader;
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
 
-
 // Loading [processType] from configuration file.
 static string processType;
 int acquireTypeOfProcess(string&& file);
-
 
 int main(int argc, char** argv) {
   // Set ECS display sections, and clear default obj's errors (optional)
@@ -59,14 +58,18 @@ int main(int argc, char** argv) {
     _ERRT(2!=argc,"Use only one configuration file as parameter. Got [%i] parameters, need only 1.",argc-1)
     _ERRT(0!=acquireTypeOfProcess(string(argv[1])),"Failed to identify the requested process type.")
     cout << "ProcessType: " << processType << endl;
+    cout << "=======================================================================" << endl;
 
     if (0==processType.compare("Example")) {
       _ERRT(0!=Example(argc, argv),"Failed to run \"Example()\" function!")
+    } else if (0==processType.compare("TestExampleCAPI")) {
+      _ERRT(0!=TestExampleCAPI(argc, argv),"Failed to run \"TestExampleCAPI\" function!")
     } else {
       _ERRSTR(1,{
         ss << "Unknown process type: [" << processType << "]" << endl;
         ss << "Valid Case-Sensitive process types are: "<<endl;
         ss << " - [Example]" << endl;
+        ss << " - [TestExampleCAPI]" << endl;
       })
       _ERRT(1,"Abort due to unknown process type.")
     }

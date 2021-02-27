@@ -4,7 +4,8 @@
           "name": "Win32",
           "includePath": [
               "${workspaceFolder}/**",
-              "${workspaceFolder}/C++/include/**",
+              "${workspaceFolder}/C++/Common/**",
+              "${workspaceFolder}/C++/src/include/**",
               "${workspaceFolder}/ExtLibs/CCEXP/C++/src/include/**",
               "${workspaceFolder}/ExtLibs/CECS/C++/src/include/**",
               "${workspaceFolder}/ExtLibs/MVECTOR/src/include/**",
