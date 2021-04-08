@@ -1,9 +1,10 @@
 @echo off
 set CURRP=%~dp0
+set BASEP="%CURRP%..\.."
 cls
-cd ..\..\BuildVersion
+cd %BASEP%\BuildVersion
 call UpdateBuildVersion.exe
-cd "%CURRP%..\..\C++\build"
+cd "%BASEP%\C++\build"
 make -j8
-move vp-cpp-template.exe "%CURRP%..\..\workdir\"
+move vp-cpp-template.exe "%BASEP%\workdir\"
 cd "%CURRP%"
