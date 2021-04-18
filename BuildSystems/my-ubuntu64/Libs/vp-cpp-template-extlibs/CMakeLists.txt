@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(PROJECTNAME "vp-cpp-template-extlibs")
-# set(LINK_OPTIONS "-pthread")
+set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 

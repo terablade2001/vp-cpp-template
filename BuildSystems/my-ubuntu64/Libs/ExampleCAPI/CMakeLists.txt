@@ -24,11 +24,26 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${C_FLAGS}")
 set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
+include_directories(
+  ${CMAKE_CURRENT_LIST_DIR}/Common/
+  ${CMAKE_CURRENT_LIST_DIR}/Libs/ExampleCAPI/API-Headers
+  ${CMAKE_CURRENT_LIST_DIR}/Libs/ExampleCAPI/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpBuildVersioner/C++
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpConfigReader/src
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer
+)
+
 set(LINKvpCppTemplateExtLibs "")
 if (${USE_vpCppTemplateExtLibs_DLL})
   set(LINKvpCppTemplateExtLibs "vpCppTemplateExtLibs")
   add_library(vpCppTemplateExtLibs MODULE IMPORTED)
-  set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.dll")
+  set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.so")
   file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/Common/*.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/Libs/ExampleCAPI/src/*.cpp"

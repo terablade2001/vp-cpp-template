@@ -39,7 +39,7 @@ set(LINKvpCppTemplateExtLibs "")
 if (${USE_vpCppTemplateExtLibs_DLL})
   set(LINKvpCppTemplateExtLibs "vpCppTemplateExtLibs")
   add_library(vpCppTemplateExtLibs MODULE IMPORTED)
-  set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.dll")
+  set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.so")
   file(GLOB CXX_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
   )
