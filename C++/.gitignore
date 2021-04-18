@@ -1,3 +1,4 @@
 build/
 build_ExampleCAPI/
+build_vp-cpp-template-extlibs/
 CMakeLists.txt

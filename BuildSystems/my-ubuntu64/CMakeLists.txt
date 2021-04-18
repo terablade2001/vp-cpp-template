@@ -3,8 +3,10 @@ cmake_minimum_required(VERSION 2.8.11)
 set(PROJECTNAME "vp-cpp-template")
 set(LINK_OPTIONS "-pthread")
 
-project(${PROJECTNAME})
+# Set to [ON] in order to link with precompiled vp-cpp-template ExtLibs library.
+set(USE_vpCppTemplateExtLibs_DLL ON)
 
+project(${PROJECTNAME})
 
 set(CXX_FLAGS "-std=c++11 -O3 -s -Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL -D__unix__")
 set(C_FLAGS "-Wall -O3 -s -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL -D__unix__")
@@ -32,6 +34,16 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer
 )
+
+set(LINKvpCppTemplateExtLibs "")
+if (${USE_vpCppTemplateExtLibs_DLL})
+  set(LINKvpCppTemplateExtLibs "vpCppTemplateExtLibs")
+  add_library(vpCppTemplateExtLibs MODULE IMPORTED)
+  set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.dll")
+  file(GLOB CXX_SRCS
+    "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
+  )
+else()
 file(GLOB CXX_SRCS
   "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/*.cpp"
@@ -43,6 +55,7 @@ file(GLOB CXX_SRCS
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
 )
+endif()
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})
-target_link_libraries(${PROJECTNAME} example_c_api ${LINK_OPTIONS})
+target_link_libraries(${PROJECTNAME} example_c_api ${LINKvpCppTemplateExtLibs} ${LINK_OPTIONS})
