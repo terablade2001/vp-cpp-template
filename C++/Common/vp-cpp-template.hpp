@@ -4,9 +4,6 @@
 #include <CCEXP.hpp>
 #include <CECS.hpp>
 #include <PThreadPool.hpp>
-#include <vkpCircularBuffer.hpp>
-#include <vkpConfigReader.hpp>
-#include <vkpProgressBar.hpp>
-#include <vkpTimer.hpp>
+#include <vkpLibs.hpp>
 
 #endif

@@ -1,7 +1,5 @@
-#include <ExampleCTypes.hpp>
-#include "../../../BuildVersion/BuildVersion.hpp"
 #include <Common.hpp>
-#include <vkpBuildVersioner.hpp>
+#include "../API-Headers/ExampleCTypes.hpp"
 
 CECS_MODULE("ExampleCTypes")
 using namespace vkp;

@@ -1,8 +1,6 @@
-#include <ExampleCAPI.hpp> // CAPI functions for .dll use
-#include <DummyClass.hpp> // .dll internal objects
-#include "../../../BuildVersion/BuildVersion.hpp"
 #include <Common.hpp>
-#include <vkpBuildVersioner.hpp>
+#include "../API-Headers/ExampleCAPI.hpp" // CAPI functions for .dll use
+#include "../include/DummyClass.hpp" // .dll internal objects
 
 CECS_MODULE("ExampleCAPI")
 

@@ -13,23 +13,20 @@ set(CMAKE_CONFIGURATION_TYPES "Release")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CXX_FLAGS}")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${C_FLAGS}")
 set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
-set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN")
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/../C++/Common/
-  ${CMAKE_CURRENT_LIST_DIR}/../C++/Libs/vp-cpp-template-extlibs/API-Headers
+  ${CMAKE_CURRENT_LIST_DIR}/Common/
+  ${CMAKE_CURRENT_LIST_DIR}/Libs/vp-cpp-template-extlibs/API-Headers
+  ${CMAKE_CURRENT_LIST_DIR}/..
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/include
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpBuildVersioner/C++
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCircularBuffer
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpConfigReader/src
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer
+  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs
 )
 file(GLOB CXX_SRCS
-  "${CMAKE_CURRENT_LIST_DIR}/../C++/Libs/vp-cpp-template-extlibs/src/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Libs/vp-cpp-template-extlibs/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/*.cpp"
@@ -38,6 +35,7 @@ file(GLOB CXX_SRCS
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpConfigReader/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpOpmlCPP/*.cpp"
 )
 
 add_library(${PROJECTNAME} SHARED ${CXX_SRCS} ${C_SRCS})

@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <Example.hpp>
+#include "include/Example.hpp"
 
 using namespace std;
 using namespace vkp;
@@ -160,6 +160,20 @@ int Example(int argc, char** argv) {
   storingTimer.enabled=false;
   cout << perfTimers.str() << endl;
   cout << storingTimer.str() << endl;
+
+  // Play a bit with the vkp::opmlCPP class;
+  vkp::opmlCPP opml("Debug","Debug.opml");
+  opml.add("Branch A");
+  opml.push("Branch B");
+  for (int i = 0; i < 5; i++) {
+    opml.push(opml.s<<"Branch C-"<<i);
+      for (int j = i; j < i+3; j++) {
+        opml.add(opml.s<<"Value j = "<<j);
+      }
+    opml.pop();
+  }
+  opml.pop();
+  opml.add("Branch D");
 
   _ERRI(1,"[EXAMPLE forced Error] -> To see how CECS works! ;)")
   return 0;

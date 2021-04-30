@@ -1,4 +1,4 @@
-#include <DummyClass.hpp>
+#include "../include/DummyClass.hpp"
 
 CECS_MODULE("DummyClass")
 

@@ -25,7 +25,7 @@
 import os
 import sys
 FF = (os.path.dirname(os.path.realpath(__file__))).replace("\\","/")+"/"
-sys.path.append(FF+'../ExtLibs/CCEXP/python/')
+sys.path.append(FF+'../ExtLibs/CCEXP/Python/')
 from ccexp import *
 
 import BuildVersion as BV

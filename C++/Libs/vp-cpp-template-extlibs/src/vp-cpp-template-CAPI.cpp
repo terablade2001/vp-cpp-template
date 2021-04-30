@@ -1,7 +1,6 @@
 #include <vp-cpp-template.hpp>
 #include <vp-cpp-teamplate-extlibs.hpp>
-#include "../../../BuildVersion/BuildVersion.hpp"
-#include <vkpBuildVersioner.hpp>
+#include "../../../../BuildVersion/BuildVersion.hpp"
 
 CECS_MODULE("vp-cpp-tempalte-extlibs")
 using namespace vkp;

@@ -21,11 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <Example.hpp>
-#include <TestExampleCAPI.hpp>
-
-#include "../../BuildVersion/BuildVersion.hpp"
-#include <vkpBuildVersioner.hpp>
+#include "include/Example.hpp"
+#include "include/TestExampleCAPI.hpp"
 
 using namespace std;
 using namespace vkp;
