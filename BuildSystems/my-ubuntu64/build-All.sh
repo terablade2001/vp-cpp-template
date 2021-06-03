@@ -1,13 +1,13 @@
 #!/bin/bash
 cd Libs/vp-cpp-template-extlibs
-. ./cmake-build.cmd
-. ./rmake-build.cmd
+. ./cmake-build.sh
+. ./rmake-build.sh
 cd ../ExampleCTypes
-. ./cmake-build.cmd
-. ./rmake-build.cmd
+. ./cmake-build.sh
+. ./rmake-build.sh
 cd ../ExampleCAPI
-. ./cmake-build.cmd
-. ./rmake-build.cmd
+. ./cmake-build.sh
+. ./rmake-build.sh
 cd ../..
-. ./cmake-build.cmd
-. ./rmake-build.cmd
+. ./cmake-build.sh
+. ./rmake-build.sh
