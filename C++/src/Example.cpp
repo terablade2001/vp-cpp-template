@@ -62,27 +62,24 @@ void* Thread_Execute(void* _data) {
 
 
 
-static string ExportTestFile;
+class ExampleConfigData : public vkpConfigReader::_baseDataLoader {
+  public:
+  string ExportTestFile;
 
-int Example_LoadConfigParameters(string&& file) {
-  _ERRINF(1,"config file: [%s]", file.c_str())
-  cfg_type cfg_data;
-  _ERRI(0!=cfg_LoadFile(file.c_str(), cfg_data),"Failed to load config file")
-  std::vector<std::string> CheckParamList = {
-    "ExportTestFile"
-  };
-  std::string NotExistingParams;
-  int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
-  _ERRSTR(r!=0,{ ss << "The following parameters were not found: \n" << "[" << NotExistingParams << "]"; })
-  _ERRI(r!=0,"Missing parameter in configuration file.")
-  _ERRI(0!=cfg_GetParam(cfg_data, "ExportTestFile", ExportTestFile),"Failed to process parameters [ExportTestFile]")
-  _ECSCLS_
-  return 0;
-}
+  std::vector<std::string>& getCheckParamList() {
+    static std::vector<std::string> CheckParamList = {
+      "ExportTestFile"
+    };
+    return CheckParamList;
+  }
 
+  int loadDataSection(cfg_type& cfgData) {
+    vkpConfigReaderLOADPARAM(ExportTestFile)
+    return 0;
+  }
+};
 
-
-
+static ExampleConfigData confData;
 
 
 int Example(int argc, char** argv) {
@@ -96,7 +93,7 @@ int Example(int argc, char** argv) {
   vkpTimer storingTimer("storing and cleaning ccexp");
 
   T00.start();
-    _ERRI(0!=Example_LoadConfigParameters(string(argv[1])),"Failed to load config file [%s]",argv[1]);
+    _ERRI(0!=confData.loadConfigFile(argv[1]),"Failed to load config file [%s]",argv[1]);
   T00.stop();
 
   // Condition debug statements.
@@ -114,7 +111,7 @@ int Example(int argc, char** argv) {
   { vkpTimer& T = perfTimers.getTimer("01 - Loading and setup"); T.start();
 
     // Create the CCEXP object for recording
-    CCEXP::Initialize(DBG,ExportTestFile.c_str());
+    CCEXP::Initialize(DBG,confData.ExportTestFile.c_str());
     CCEXP::AddTable<char>(DBG,"Message","char");
     CCEXP::AddTable<int>(DBG,"task-id","int32");
 

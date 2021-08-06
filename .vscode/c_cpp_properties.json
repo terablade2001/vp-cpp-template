@@ -10,17 +10,20 @@
               "${workspaceFolder}/ExtLibs/CECS/C++/src/include/**",
               "${workspaceFolder}/ExtLibs/MVECTOR/src/include/**",
               "${workspaceFolder}/ExtLibs/PThreadPool/C/src/include/**",
-              "${workspaceFolder}/ExtLibs/vkp_Config/src/**",
               "${workspaceFolder}/ExtLibs/vkpLibs/vkpBuildVersioner/C++/**",
               "${workspaceFolder}/ExtLibs/vkpLibs/vkpProgressBar/**",
               "${workspaceFolder}/ExtLibs/vkpLibs/vkpCircularBuffer/**",
-              "${workspaceFolder}/ExtLibs/vkpLibs/vkpTimer/**"
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpTimer/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpConfigReader/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpCSVHandler/**",
+              "${workspaceFolder}/ExtLibs/vkpLibs/vkpOpmlCPP/**"
           ],
           "defines": [
               "_DEBUG",
               "UNICODE",
               "_UNICODE",
-              "VKP_USE_PTHREAD_POOL"
+              "VKP_USE_PTHREAD_POOL",
+              "__ECSOBJ__=ECS"
           ],
           "intelliSenseMode": "gcc-x64",
           "compilerPath": "c:/TDM-GCC-64/bin/g++.exe",

@@ -3,6 +3,7 @@
     "*.m": "matlab",
     "*.proto3": "proto3",
     "*.config": "makefile",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "atomic": "cpp"
   }
 }

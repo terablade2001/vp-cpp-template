@@ -6,23 +6,26 @@ using namespace std;
 using namespace vkp;
 using namespace vkpConfigReader;
 
-static float InputValue;
+class TestExampleCAPIConfigData : public vkpConfigReader::_baseDataLoader {
+  public:
+  float InputValue;
 
-int TestExampleCAPI_LoadConfigParameters(string&& file) {
-  _ERRINF(1,"config file: [%s]", file.c_str())
-  cfg_type cfg_data;
-  _ERRI(0!=cfg_LoadFile(file.c_str(), cfg_data),"Failed to load config file")
-  std::vector<std::string> CheckParamList = {
-    "InputValue"
-  };
-  std::string NotExistingParams;
-  int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
-  _ERRSTR(r!=0,{ ss << "The following parameters were not found: \n" << "[" << NotExistingParams << "]"; })
-  _ERRI(r!=0,"Missing parameter in configuration file.")
-  _ERRI(0!=cfg_GetParam(cfg_data, "InputValue", InputValue),"Failed to process parameters [InputValue]")
-  _ECSCLS_
-  return 0;
-}
+  std::vector<std::string>& getCheckParamList() {
+    static std::vector<std::string> CheckParamList = {
+      "InputValue"
+    };
+    return CheckParamList;
+  }
+
+  int loadDataSection(cfg_type& cfgData) {
+    vkpConfigReaderLOADPARAM(InputValue)
+    return 0;
+  }
+};
+
+
+static TestExampleCAPIConfigData confData;
+
 
 int TestExampleCAPI(int argc, char** argv) {
 
@@ -39,14 +42,14 @@ int TestExampleCAPI(int argc, char** argv) {
   ExampleCAPI_setcecs(__ECSOBJ__.cecs());
   // ---------------------------------------------------------------------------
 
-  _ERRI(0!=TestExampleCAPI_LoadConfigParameters(string(argv[1])),"Failed to load config file [%s]",argv[1]);
+  _ERRI(0!=confData.loadConfigFile(argv[1]),"Failed to load config file [%s]",argv[1])
 
   // Get .dll version
   char* dllVersion;
   _ERRI(0!=ExampleCAPI_version((void**)&dllVersion),"Failed to get .dll version!")
   std::cout << "= Library [ExampleCAPI.dll]: Version: " <<dllVersion<<std::endl;
 
-  dbg_(63,"InputValue = "<<InputValue)
+  dbg_(63,"InputValue = " << confData.InputValue)
 
   // Execute .dll functions
   try {
