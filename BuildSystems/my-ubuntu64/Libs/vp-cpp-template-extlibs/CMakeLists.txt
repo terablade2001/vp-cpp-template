@@ -35,6 +35,7 @@ file(GLOB CXX_SRCS
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpProgressBar/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpTimer/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpOpmlCPP/*.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs/vkpCSVHandler/*.cpp"
 )
 
 add_library(${PROJECTNAME} SHARED ${CXX_SRCS} ${C_SRCS})

@@ -56,10 +56,13 @@ There are libraries that can be compiled directly in the project, providing dire
 * [PThreadPool: *pthreads Threading Pool in C++*](https://github.com/terablade2001/PThreadPool)
 * [vkp_Config: *Configuration files reader in C++*](https://github.com/terablade2001/vkp_Config)
 * [vkpLibs: *Utilities*](https://github.com/terablade2001/vkpLibs)
-  * vkpBuildVersioner [C++, Python]: *System for automated versioning in C++ and Python.*
-  * vkpProgressBar [C++]: *A class to create custom progress bars in the stdout, to monitor progress graphically.*
-  * vkpCircularBuffer [C++, Requires: CECS]: *A very simple template-class for circular buffers where their index is treated alike infinite arrays.*
-  * vkpTimer [C++]: *Classes for easily measuring and handling processing times between two points of code.*
+  * **vkpBuildVersioner** [C++, Python]: System for automated versioning in C++ and Python.
+  * **vkpConfigReader** [C++]: Utility to load multiple variables from configuration files directly to the wanted types.
+  * **vkpProgressBar** [C++]: A class to create custom progress bars in the stdout, to monitorprogress graphically.
+  * **vkpCircularBuffer** [C++, Requires: CECS]: A very simple template-class for circular buffers where their index is treated alike infinite arrays.
+  * **vkpTimer** [C++]: Classes for easily measuring and handling processing times between two points of code.
+  * **vkpOpmlCpp** [C++]: Export data as strings to MindMap's opml format.
+  * **vkpCSVHandler** [C++]: Load, handle and store CSV files in C++.
 * [CCEXP: *Utility for easy user-defined structured data recording/importing/sharing in C++ / MatLab / Python3*](https://github.com/terablade2001/CCEXP)
 * [MVECTOR: *A modified partial \<vector\> library which also tracks the size of the allocated memory*](https://github.com/terablade2001/MVECTOR) 
 

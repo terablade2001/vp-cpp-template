@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) 2017 - 2019 Vasileios Kon. Pothos (terablade2001)
+// Copyright (c) 2017 - 2021 Vasileios Kon. Pothos (terablade2001)
 // https://github.com/terablade2001/vp-cpp-template
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,6 +23,7 @@
 
 #include "include/Example.hpp"
 #include "include/TestExampleCAPI.hpp"
+#include "include/TestVkpCSVHandler.hpp"
 
 using namespace std;
 using namespace vkp;
@@ -61,12 +62,15 @@ int main(int argc, char** argv) {
       _ERRT(0!=Example(argc, argv),"Failed to run \"Example()\" function!")
     } else if (0==processType.compare("TestExampleCAPI")) {
       _ERRT(0!=TestExampleCAPI(argc, argv),"Failed to run \"TestExampleCAPI\" function!")
+    } else if (0==processType.compare("TestVkpCSVHandler")) {
+      _ERRT(0!=TestVkpCSVHandler(argc, argv),"Failed to run \"TestVkpCSVHandler\" function!")
     } else {
       _ERRSTR(1,{
         ss << "Unknown process type: [" << processType << "]" << endl;
         ss << "Valid Case-Sensitive process types are: "<<endl;
         ss << " - [Example]" << endl;
         ss << " - [TestExampleCAPI]" << endl;
+        ss << " - [TestVkpCSVHandler]" << endl;
       })
       _ERRT(1,"Abort due to unknown process type.")
     }
