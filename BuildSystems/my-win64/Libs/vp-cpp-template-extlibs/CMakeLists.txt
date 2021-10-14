@@ -26,6 +26,7 @@ include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs
 )
 file(GLOB CXX_SRCS
+  "${CMAKE_CURRENT_LIST_DIR}/Common/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Libs/vp-cpp-template-extlibs/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/*.cpp"

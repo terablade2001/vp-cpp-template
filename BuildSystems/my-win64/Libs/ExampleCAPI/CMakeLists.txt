@@ -32,7 +32,6 @@ include_directories(
 add_library(vpCppTemplateExtLibs MODULE IMPORTED)
 set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.dll")
 file(GLOB CXX_SRCS
-  "${CMAKE_CURRENT_LIST_DIR}/../C++/Common/*.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/../C++/Libs/ExampleCAPI/src/*.cpp"
 )
 
