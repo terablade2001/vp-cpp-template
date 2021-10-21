@@ -12,7 +12,7 @@ set(CMAKE_CONFIGURATION_TYPES "Release")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CXX_FLAGS}")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${C_FLAGS}")
 set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
-set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN")
+set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN -Wl,-z,origin")
 
 include_directories(
   ${CMAKE_CURRENT_LIST_DIR}/Common/
