@@ -3,8 +3,7 @@ set CURRP=%~dp0
 set BASEP="%CURRP%..\..\..\.."
 set ProjectName="ExampleCAPI"
 set ProjectFile="lib%ProjectName%.dll"
-cls
-cd "%BASEP%\C++\build_%ProjectName%"
+cd "%BASEP%\C++\build_%ProjectName%\build"
 make -j8
 strip --strip-unneeded "%ProjectFile%"
 nm -gC "%ProjectFile%"

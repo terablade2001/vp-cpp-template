@@ -6,7 +6,7 @@ export ProjectName="ExampleCAPI"
 export ProjectFile="lib$ProjectName.so"
 cd $BASEP/BuildVersion
 ./UpdateBuildVersion
-cd "$BASEP/C++/build_$ProjectName"
+cd "$BASEP/C++/build_$ProjectName/build"
 make -j8
 strip --strip-unneeded $ProjectFile
 nm -gC $ProjectFile
