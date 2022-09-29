@@ -5,6 +5,7 @@ set(PROJECTNAME "ExampleCTypes")
 
 project(${PROJECTNAME})
 message(WARNING "[CMAKE_CURRENT_LIST_DIR] = ${CMAKE_CURRENT_LIST_DIR}")
+set (BASE_PROJECT_FOLDER "${CMAKE_CURRENT_LIST_DIR}/../..")
 
 set(CXX_FLAGS "-std=c++11 -O3 -s -Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
 set(C_FLAGS "-Wall -O3 -s -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
@@ -20,19 +21,19 @@ set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN")
 # set_target_properties(opencvbuild PROPERTIES IMPORTED_LOCATION "[...]/libopencv_world410.dll")
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/../..
-  ${CMAKE_CURRENT_LIST_DIR}/../../C++/Common/
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/CCEXP/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/CECS/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/MVECTOR/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/PThreadPool/C/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/vkpLibs
+  ${BASE_PROJECT_FOLDER}/
+  ${BASE_PROJECT_FOLDER}/C++/Common/
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CCEXP/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CECS/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/MVECTOR/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/PThreadPool/C/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/vkpLibs
 )
 
 add_library(vpCppTemplateExtLibs MODULE IMPORTED)
-set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../../workdir/libvp-cpp-template-extlibs.dll")
+set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${BASE_PROJECT_FOLDER}/workdir/libvp-cpp-template-extlibs.dll")
 file(GLOB CXX_SRCS
-  "${CMAKE_CURRENT_LIST_DIR}/../../C++/Libs/ExampleCTypes/src/*.cpp"
+  "${BASE_PROJECT_FOLDER}/C++/Libs/ExampleCTypes/src/*.cpp"
 )
 
 add_library(${PROJECTNAME} SHARED ${CXX_SRCS} ${C_SRCS})

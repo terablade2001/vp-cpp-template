@@ -1,8 +1,9 @@
 @echo off
 set CURRP=%~dp0
 set BASEP="%CURRP%..\.."
-cls
-cd "%BASEP%\C++\build"
+set ProjectName="vp-cpp-template"
+set ProjectFile="%ProjectName%.exe"
+cd "%BASEP%\build\build_%ProjectName%\build"
 make -j8
-move vp-cpp-template.exe "%BASEP%\workdir\"
+move /Y "%ProjectFile%" "%BASEP%\workdir\"
 cd "%CURRP%"

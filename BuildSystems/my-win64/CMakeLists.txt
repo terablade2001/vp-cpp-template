@@ -5,6 +5,7 @@ set(PROJECTNAME "vp-cpp-template")
 
 project(${PROJECTNAME})
 message(WARNING "[CMAKE_CURRENT_LIST_DIR] = ${CMAKE_CURRENT_LIST_DIR}")
+set (BASE_PROJECT_FOLDER "${CMAKE_CURRENT_LIST_DIR}/../..")
 
 set(CXX_FLAGS "-std=c++11 -O3 -s -Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
 set(C_FLAGS "-Wall -O3 -s -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
@@ -16,24 +17,26 @@ set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN")
 
 add_library(example_c_api MODULE IMPORTED)
-set_target_properties(example_c_api PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libExampleCAPI.dll")
+set_target_properties(example_c_api PROPERTIES IMPORTED_LOCATION "${BASE_PROJECT_FOLDER}/workdir/libExampleCAPI.dll")
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/..
-  ${CMAKE_CURRENT_LIST_DIR}/../C++/Common
-  ${CMAKE_CURRENT_LIST_DIR}/../C++/Libs/ExampleCAPI/API-Headers
-  ${CMAKE_CURRENT_LIST_DIR}/../C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CCEXP/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/CECS/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/MVECTOR/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/PThreadPool/C/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../ExtLibs/vkpLibs
+  ${BASE_PROJECT_FOLDER}/
+  ${BASE_PROJECT_FOLDER}/C++/Common
+  ${BASE_PROJECT_FOLDER}/C++/Libs/ExampleCAPI/API-Headers
+  ${BASE_PROJECT_FOLDER}/C++/src/include
+  ${BASE_PROJECT_FOLDER}/C++/src/ModuleTests/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CCEXP/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CECS/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/MVECTOR/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/PThreadPool/C/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/vkpLibs
 )
 
 add_library(vpCppTemplateExtLibs MODULE IMPORTED)
-set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../workdir/libvp-cpp-template-extlibs.dll")
+set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${BASE_PROJECT_FOLDER}/workdir/libvp-cpp-template-extlibs.dll")
 file(GLOB CXX_SRCS
-  "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp"
+  "${BASE_PROJECT_FOLDER}/C++/src/*.cpp"
+  "${BASE_PROJECT_FOLDER}/C++/src/ModuleTests/*.cpp"
 )
 
 add_executable(${PROJECTNAME} ${CXX_SRCS} ${C_SRCS})

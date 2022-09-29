@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) 2017 - 2021 Vasileios Kon. Pothos (terablade2001)
+// Copyright (c) 2016 - 2022 Vasileios Kon. Pothos (terablade2001)
 // https://github.com/terablade2001/vp-cpp-template
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,9 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "include/Example.hpp"
-#include "include/TestExampleCAPI.hpp"
-#include "include/TestVkpCSVHandler.hpp"
+#include "ModuleTests/include/Example.hpp"
+#include "ModuleTests/include/TestExampleCAPI.hpp"
+#include "ModuleTests/include/TestVkpCSVHandler.hpp"
 
 using namespace std;
 using namespace vkp;
@@ -32,6 +32,8 @@ using namespace vkpConfigReader;
 // Versioning and CECS
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
+
+int ModuleTesting(int argc, char** argv);
 
 // Loading [processType] from configuration file.
 static string processType;
@@ -58,7 +60,9 @@ int main(int argc, char** argv) {
     cout << "ProcessType: " << processType << endl;
     cout << "=======================================================================" << endl;
 
-    if (0==processType.compare("Example")) {
+    if (0==processType.compare("ModuleTesting")) {
+      _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
+    } else if (0==processType.compare("Example")) {
       _ERRT(0!=Example(argc, argv),"Failed to run \"Example()\" function!")
     } else if (0==processType.compare("TestExampleCAPI")) {
       _ERRT(0!=TestExampleCAPI(argc, argv),"Failed to run \"TestExampleCAPI\" function!")
@@ -68,6 +72,7 @@ int main(int argc, char** argv) {
       _ERRSTR(1,{
         ss << "Unknown process type: [" << processType << "]" << endl;
         ss << "Valid Case-Sensitive process types are: "<<endl;
+        ss << " - [ModuleTesting]" << endl;
         ss << " - [Example]" << endl;
         ss << " - [TestExampleCAPI]" << endl;
         ss << " - [TestVkpCSVHandler]" << endl;
@@ -75,14 +80,28 @@ int main(int argc, char** argv) {
       _ERRT(1,"Abort due to unknown process type.")
     }
 
-    cout << "Program completed." << endl;
+    // These two test functions are expected to fail in the end. To pass the 
+    // module testing, we have to return wrong return code if they don't fail.
+    if (0==processType.compare("Example")) { return -1; }
+    if (0==processType.compare("TestExampleCAPI")) { return -1; }
+
+    cout << "=*-*= Program completed =*-*=" << endl;
+    
   } catch(std::exception &e) {
     string eColorStart; string eColorFix;
 
     // Enable the following line for colored error output
     // eColorStart = string("\033[1;36m"); eColorFix = string("\033[m");
-    std::cerr<< std::endl<<"(*) Exception occurred: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
+    std::cout<< std::endl<<"(*) Exception occurred: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
+
+    // These two test functions are expected to fail in the end. To pass the 
+    // module testing, we have to return correct return code on exception for them
+    if (0==processType.compare("Example")) { cout << "=*-*= Program completed =*-*=" << endl; return 0; }
+    if (0==processType.compare("TestExampleCAPI")) { cout << "=*-*= Program completed =*-*=" << endl; return 0; }
+
+    return -1;
   }
+
   return 0;
 }
 

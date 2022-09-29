@@ -5,6 +5,7 @@ set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 message(WARNING "[CMAKE_CURRENT_LIST_DIR] = ${CMAKE_CURRENT_LIST_DIR}")
+set (BASE_PROJECT_FOLDER "${CMAKE_CURRENT_LIST_DIR}/../..")
 
 # Code and Path to other .dlls and libs
 # message("PKG_CONFIG_PATH = $ENV{PKG_CONFIG_PATH}")
@@ -22,19 +23,19 @@ set(CMAKE_LDFLAGS "${CMAKE_LDFLAGS} -L. ")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined,-rpath,\$ORIGIN -Wl,-z,origin")
 
 include_directories(
-  ${CMAKE_CURRENT_LIST_DIR}/../..
-  ${CMAKE_CURRENT_LIST_DIR}/../../C++/Common/
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/CCEXP/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/CECS/C++/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/MVECTOR/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/PThreadPool/C/src/include
-  ${CMAKE_CURRENT_LIST_DIR}/../../ExtLibs/vkpLibs
+  ${BASE_PROJECT_FOLDER}/
+  ${BASE_PROJECT_FOLDER}/C++/Common/
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CCEXP/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/CECS/C++/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/MVECTOR/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/PThreadPool/C/src/include
+  ${BASE_PROJECT_FOLDER}/ExtLibs/vkpLibs
 )
 
 add_library(vpCppTemplateExtLibs MODULE IMPORTED)
-set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/../../workdir/libvp-cpp-template-extlibs.so")
+set_target_properties(vpCppTemplateExtLibs PROPERTIES IMPORTED_LOCATION "${BASE_PROJECT_FOLDER}/workdir/libvp-cpp-template-extlibs.so")
 file(GLOB CXX_SRCS
-  "${CMAKE_CURRENT_LIST_DIR}/../../C++/Libs/ExampleCAPI/src/*.cpp"
+  "${BASE_PROJECT_FOLDER}/C++/Libs/ExampleCAPI/src/*.cpp"
 )
 
 add_library(${PROJECTNAME} SHARED ${CXX_SRCS} ${C_SRCS})

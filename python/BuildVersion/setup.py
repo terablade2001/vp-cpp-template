@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2017 - 2019 Vasileios Kon. Pothos (terablade2001)
+# Copyright (c) 2016 - 2022 Vasileios Kon. Pothos (terablade2001)
 # https://github.com/terablade2001
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
