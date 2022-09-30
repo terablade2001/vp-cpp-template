@@ -1,16 +1,17 @@
 # Table Of Contents
 
-* [What is vp-cpp-template](#What is vp-cpp-template?): A few words about this project and why you may be interested to check and use it!
-* [Quick build and testing](#Quick build and testing): Demonstrating how to quick install, compile and test it with just a few commands.
-* [TODOs](#TODOs): Things that are planned to be added over time.
-* [LICENSE](#LICENSE): License for this software/project.
+* [What is vp-cpp-template](#what-is-vp-cpp-template): A few words about this project and why you may be interested to check and use it!
+* [Quick build and testing](#quick-build-and-testing): Demonstrating how to quick install, compile and test it with just a few commands.
+* [TODOs](#todos): Things that are planned to be added over time.
+	* [Completed TODOs - versioning](#completed-todos---versioning)
+* [LICENSE](#license): License for this software/project.
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
 
 **Warning**: The following notes may not be valid after **(0.049)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 It's a C++ & Python framework which includes my most important libraries (CECS / CCEXP / 
 MVECTOR / vkp_Config / PThreadPool / vkpLibs), in a ready-to-be-compiled scheme, under two BuildSystems: Windows and Ubuntu. The framework also provides predefined vscode tasks.
@@ -35,11 +36,11 @@ The included libraries can be compiled directly in the project, providing some t
 * [CCEXP: *Utility for easy user-defined structured data recording/importing/sharing in C++ / MatLab / Python3*](https://github.com/terablade2001/CCEXP)
 * [MVECTOR: *A modified partial \<vector\> library which also tracks the size of the allocated memory*](https://github.com/terablade2001/MVECTOR) 
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 # Quick build and testing
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 This section shows how to quickly clone, build and test the template, in both windows (TDM-GCC) and ubuntu systems. In both cases the **vp-cpp-template** project will execute a Modules-Test and provide the results that passed (all 3 modules / tests should pass).
 
@@ -139,12 +140,12 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 • The intermediate results of the three individual Module-Tests can be also seen in the generated `moduleTestsLog_Passed.log` file.
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 
 # TODOs
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 Things that are expected to be added in the project over time.
 
@@ -158,7 +159,9 @@ Things that are expected to be added in the project over time.
   - [ ] makeDir()
   - [ ] Support functions for *OpenCV*
 
-## Completed TODOs
+## Completed TODOs - versioning
+### version (0.049.01)
+- [x] Fix README.md anchor links to be displayed correctly.
 ### version (0.049)
 - [x] Integrated ModuleTesting
 - [x] Move all intermediate builds to build/ folder instead of C++/ folder.
@@ -171,11 +174,11 @@ Things that are expected to be added in the project over time.
   - [x] Removing make-build.{cmd/sh} and build-all.{cmd/sh} commands.
 
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 # LICENSE
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
 ```
 MIT License
@@ -190,5 +193,5 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
-◄ [Table Of Contents](#Table Of Contents)
+◄ [Table Of Contents](#table-of-contents)
 
