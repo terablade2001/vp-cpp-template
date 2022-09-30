@@ -14,7 +14,7 @@
 ◄ [Table Of Contents](#table-of-contents)
 
 It's a C++ & Python framework which includes my most important libraries (CECS / CCEXP / 
-MVECTOR / vkp_Config / PThreadPool / vkpLibs), in a ready-to-be-compiled scheme, under two BuildSystems: Windows and Ubuntu. The framework also provides predefined vscode tasks.
+MVECTOR / vkp_Config / PThreadPool / vkpLibs), in a ready-to-be-compiled scheme, under two BuildSystems: Windows and Ubuntu.
 
 You can use this *ready-to-work-on* framework with the combined aforementioned libraries, in order to setup and build quick different C++ / Python projects, for different platforms. These libraries can help you achieve different things, from integrated advanced error control, easy binary data importing/exporting for debuging and integration issues, easy access to configuration files where multiple parameters can be set during development/testing, easy access to thread-pooling mechanisms, CSV files read/write, e.t.c. Regarding the different platforms the **vp-cpp-template** project provides a `BuildSystems/` folder where developers can add specific **cmake** setups for different targeted platforms. By default the project provides Windows (TDM-GCC) and Ubuntu support.
 
@@ -149,7 +149,6 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 Things that are expected to be added in the project over time.
 
-- [ ] Update template of Documentation.odt
 - [ ] GitLab CI pipeline (for offline runners)
 - [ ] GitHub CI pipeline (for offline runners)
 - [ ] Support for `info_(level,string)` macro
@@ -160,6 +159,9 @@ Things that are expected to be added in the project over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.050)
+- [x] Update template of Documentation.odt
+- [x] Update documentation with more info regarding template's file structure, main() and processed and the ModuleTesting support.
 ### version (0.049.01)
 - [x] Fix README.md anchor links to be displayed correctly.
 ### version (0.049)
