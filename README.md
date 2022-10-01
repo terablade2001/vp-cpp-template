@@ -6,8 +6,10 @@
 	* [Completed TODOs - versioning](#completed-todos---versioning)
 * [LICENSE](#license): License for this software/project.
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
+  * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-**Warning**: The following notes may not be valid after **(0.049)** version...
+
+**Warning**: The following notes may not be valid after **(0.051)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -149,7 +151,7 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 Things that are expected to be added in the project over time.
 
-- [ ] GitLab CI pipeline (for offline runners)
+- [ ] Document an example of adding and testing a new Module with GitLab CI.
 - [ ] GitHub CI pipeline (for offline runners)
 - [ ] Support for `info_(level,string)` macro
 - [ ] Update `vkpProgressBar` (resolve some issues)
@@ -159,6 +161,10 @@ Things that are expected to be added in the project over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.051)
+- [x] Added GitLab CI pipeline for offline runners.
+  - [x] Document an example with GitLab CI integration.
+- [x] Export and provide `Documentation.odt` also as a PDF.
 ### version (0.050)
 - [x] Update template of Documentation.odt
 - [x] Update documentation with more info regarding template's file structure, main() and processed and the ModuleTesting support.
