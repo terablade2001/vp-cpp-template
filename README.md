@@ -8,7 +8,7 @@
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
   * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-**Warning**: The following notes may not be valid after **(0.052)** version...
+**Warning**: The following notes may not be valid after **(0.053)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -150,7 +150,6 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 Things that are expected to be added in the project over time.
 
-- [ ] Document an example of adding and testing a new Module with GitLab CI.
 - [ ] GitHub CI pipeline (for offline runners)
 - [ ] Support for `info_(level,string)` macro
 - [ ] Update `vkpProgressBar` (resolve some issues)
@@ -160,6 +159,8 @@ Things that are expected to be added in the project over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.053)
+- [x] Document an example of adding and testing a new Module with GitLab CI (see [Documentation.pdf](Documentation.pdf) :: page 19)
 ### version (0.052)
 - [x] Updated GitLab CI pipeline to also delete previous images/containers (cleaning)
 - [x] The ModuleTesting module is now comparing against the expected result status of tests. This gives the ability for the user to define in the testing CSV file which tests are expected to completed correctly and which are expected to generate errors. If a test produce what the user expects then it considered as Passed. If not, it's considered as Failed.
