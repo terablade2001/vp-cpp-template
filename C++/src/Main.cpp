@@ -80,11 +80,6 @@ int main(int argc, char** argv) {
       _ERRT(1,"Abort due to unknown process type.")
     }
 
-    // These two test functions are expected to fail in the end. To pass the 
-    // module testing, we have to return wrong return code if they don't fail.
-    if (0==processType.compare("Example")) { return -1; }
-    if (0==processType.compare("TestExampleCAPI")) { return -1; }
-
     cout << "=*-*= Program completed =*-*=" << endl;
     
   } catch(std::exception &e) {
@@ -93,11 +88,6 @@ int main(int argc, char** argv) {
     // Enable the following line for colored error output
     // eColorStart = string("\033[1;36m"); eColorFix = string("\033[m");
     std::cout<< std::endl<<"(*) Exception occurred: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
-
-    // These two test functions are expected to fail in the end. To pass the 
-    // module testing, we have to return correct return code on exception for them
-    if (0==processType.compare("Example")) { cout << "=*-*= Program completed =*-*=" << endl; return 0; }
-    if (0==processType.compare("TestExampleCAPI")) { cout << "=*-*= Program completed =*-*=" << endl; return 0; }
 
     return -1;
   }

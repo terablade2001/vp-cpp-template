@@ -1,4 +1,4 @@
-"Test ID" " Enabled" "Configuration File" Description
-1 1 moduleTests/confExample.cfg "Testing default example of vp-cpp-template where different utilities are working together as a working example."
-2 1 moduleTests/confTestExampleCAPI.cfg "Testing the CAPI library that is compiled as an example in vp-cpp-template project."
-3 1 moduleTests/confTestVkpCSVHandler.cfg "Testing the vkpCSVHandler utility."
+"Test ID" " Enabled" "Result Status" "Configuration File" Description
+1 1 0 moduleTests/confExample.cfg "Testing default example of vp-cpp-template where different utilities are working together as a working example."
+2 1 0 moduleTests/confTestExampleCAPI.cfg "Testing the CAPI library that is compiled as an example in vp-cpp-template project."
+3 1 1 moduleTests/confTestVkpCSVHandler.cfg "Testing the vkpCSVHandler utility."

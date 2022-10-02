@@ -145,6 +145,7 @@ typedef struct SThreadData_ModuleTesting {
   int testIdx;
   int testId;
   int testEnabled;
+  int expectedReturnStatus;
   string command;
 } SThreadData_ModuleTesting;
 
@@ -155,6 +156,7 @@ void* Thread_ModuleTesting(void* _data) {
 	SThreadData_ModuleTesting* data = (SThreadData_ModuleTesting*)_data;
 	int testIdx = data->testIdx;
 	int testId = data->testId;
+  int expectedReturnStatus = data->expectedReturnStatus;
   const string& command = data->command;
   _CERRO({return NULL;},"Test-#%i Failed before start!: Errors already captured", testIdx)
   vkpTimer T;
@@ -164,7 +166,11 @@ void* Thread_ModuleTesting(void* _data) {
   { std::lock_guard<std::mutex> lock(qmtx);
     completedEnabledTests++;
     stringstream ss;
-    if (vReturnStatus[testIdx]==0) { ss << "[+][Passed] TestID: ["; }
+    bool isSuccess = false;
+    if (((vReturnStatus[testIdx]==0) && (expectedReturnStatus!=0)) ||
+        ((vReturnStatus[testIdx]!=0) && (expectedReturnStatus==0))) isSuccess = true;
+    vReturnStatus[testIdx] = -(int)(!isSuccess);
+    if (isSuccess) { ss << "[+][Passed] TestID: ["; }
     else { ss << "[-][Failed] TestID: ["; }
     ss << testId <<"] ("<<completedEnabledTests<<" / "<<totalEnabledTests<<") :: time: "<<T.getAverageTime()<<" msec";
     std::cout<<ss.str()<<std::endl;
@@ -207,6 +213,7 @@ class CModuleTesting {
   vkpTimer totalTestTime;
   vector<vkpCSVHandlerData>* vTestIDPtr;
   vector<vkpCSVHandlerData>* vTestEnabledPtr;
+  vector<vkpCSVHandlerData>* vTestReturnStatusPtr;
   vector<vkpCSVHandlerData>* vTestConfigFilePtr;
   vector<vkpCSVHandlerData>* vTestDescriptionPtr;
 }; // class ModuleTesting
@@ -231,17 +238,19 @@ int CModuleTesting::initialize(std::string confFile) {
   _ERRI(0!=TPool.Initialize(Thread_ModuleTesting, kThreadsToUseForParallelTests, -1),"Failed to initialize thread pool")
 
   _ERRI(0!=csv.Initialize(" ","\""), "Initialize error.")
-  vector<unsigned char> headerTypes{0, 0, 2, 2};
+  vector<unsigned char> headerTypes{0, 0, 0, 2, 2};
   _ERRI(0!=csv.setHeaders(headerTypes),"Failed to set datatypes of headers")
   _ERRI(0!=csv.loadFile(confData.unitTestCSVFile, false),"Failed to load [%s] file.",confData.unitTestCSVFile.c_str())
 
 
   _ERRI(0!=csv.getDataColumnPtr((size_t)0,vTestIDPtr),"Failed to access first column")
   _ERRI(0!=csv.getDataColumnPtr((size_t)1,vTestEnabledPtr),"Failed to access second column")
-  _ERRI(0!=csv.getDataColumnPtr((size_t)2,vTestConfigFilePtr),"Failed to access third column")
-  _ERRI(0!=csv.getDataColumnPtr((size_t)3,vTestDescriptionPtr),"Failed to access fourth column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)2,vTestReturnStatusPtr),"Failed to access third column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)3,vTestConfigFilePtr),"Failed to access fourth column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)4,vTestDescriptionPtr),"Failed to access fifth column")
   _ERRI(vTestIDPtr==nullptr,"vTestIDPtr==nullptr")
   _ERRI(vTestEnabledPtr==nullptr,"vTestEnabledPtr==nullptr")
+  _ERRI(vTestReturnStatusPtr==nullptr,"vTestReturnStatusPtr==nullptr")
   _ERRI(vTestConfigFilePtr==nullptr,"vTestConfigFilePtr==nullptr")
   _ERRI(vTestDescriptionPtr==nullptr,"vTestDescriptionPtr==nullptr")
 
@@ -256,6 +265,7 @@ int CModuleTesting::initialize(std::string confFile) {
     vThreadData[testIdx].testIdx=testIdx;
     vThreadData[testIdx].testId=ktestId;
     vThreadData[testIdx].testEnabled=(*vTestEnabledPtr)[testIdx].i;
+    vThreadData[testIdx].expectedReturnStatus = (*vTestReturnStatusPtr)[testIdx].i;
     vThreadData[testIdx].command = confData.executableFile + string(" ") + (*vTestConfigFilePtr)[testIdx].s;
   }
 
@@ -391,9 +401,9 @@ int ModuleTesting(int argc, char** argv) {
 
   cout << testsResultString << endl;
 
-  _ERRI(utesting.failedTests != 0,"Tests Failed --> %i / %i",utesting.failedTests,(utesting.failedTests + utesting.passedTests))
-
   _ERRI(0!=utesting.shutdown(),"Failed to shutdown ModuleTesting")
+
+  _ERRI(utesting.failedTests != 0,"Tests Failed --> %i / %i",utesting.failedTests,(utesting.failedTests + utesting.passedTests))
   
   return 0;
 }

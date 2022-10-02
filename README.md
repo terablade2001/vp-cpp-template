@@ -8,8 +8,7 @@
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
   * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-
-**Warning**: The following notes may not be valid after **(0.051)** version...
+**Warning**: The following notes may not be valid after **(0.052)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -161,6 +160,9 @@ Things that are expected to be added in the project over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.052)
+- [x] Updated GitLab CI pipeline to also delete previous images/containers (cleaning)
+- [x] The ModuleTesting module is now comparing against the expected result status of tests. This gives the ability for the user to define in the testing CSV file which tests are expected to completed correctly and which are expected to generate errors. If a test produce what the user expects then it considered as Passed. If not, it's considered as Failed.
 ### version (0.051)
 - [x] Added GitLab CI pipeline for offline runners.
   - [x] Document an example with GitLab CI integration.
