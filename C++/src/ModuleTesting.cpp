@@ -35,7 +35,7 @@ static vector<stringstream> vResultStringStream;
 static vector<int> vReturnStatus;
 static vector<float> vTestTimeInMSec;
 static string testSuccessCompletionString;
-
+static int info_kVerboseLevel_ = -1;
 
 
 
@@ -153,9 +153,9 @@ static std::mutex qmtx;
 static int totalEnabledTests = 0;
 static int completedEnabledTests = 0;
 void* Thread_ModuleTesting(void* _data) {
-	SThreadData_ModuleTesting* data = (SThreadData_ModuleTesting*)_data;
-	int testIdx = data->testIdx;
-	int testId = data->testId;
+  SThreadData_ModuleTesting* data = (SThreadData_ModuleTesting*)_data;
+  int testIdx = data->testIdx;
+  int testId = data->testId;
   int expectedReturnStatus = data->expectedReturnStatus;
   const string& command = data->command;
   _CERRO({return NULL;},"Test-#%i Failed before start!: Errors already captured", testIdx)
@@ -173,9 +173,9 @@ void* Thread_ModuleTesting(void* _data) {
     if (isSuccess) { ss << "[+][Passed] TestID: ["; }
     else { ss << "[-][Failed] TestID: ["; }
     ss << testId <<"] ("<<completedEnabledTests<<" / "<<totalEnabledTests<<") :: time: "<<T.getAverageTime()<<" msec";
-    std::cout<<ss.str()<<std::endl;
+    info_(2,ss.str()) // Print these results only if info_kVerboseLevel_ >= 2.
   }
-	return NULL;
+  return NULL;
 }
 
 
@@ -280,7 +280,7 @@ int CModuleTesting::execute() {
     totalEnabledTests++;
   }
   std::cout<<"Enabled Tests = "<<totalEnabledTests<<" / "<<vThreadData.size()<<std::endl;
-  std::cout<<"\n------- START TESTING -------"<<std::endl;
+  info_(2,"\n------- START TESTING -------")
   completedEnabledTests = 0;
   totalTestTime.start();
   for (auto& v : vThreadData) {
@@ -290,7 +290,7 @@ int CModuleTesting::execute() {
   }
   TPool.Wait();
   totalTestTime.stop();
-  std::cout<<"----- TESTING COMPLETED ------\n"<<std::endl;
+  info_(2,"----- TESTING COMPLETED ------\n")
   return 0;
 }
 
@@ -391,15 +391,16 @@ int ModuleTesting(int argc, char** argv) {
 	_CHECKRI_
 
   CModuleTesting utesting;
-  const int info_kVerboseLevel_ = utesting.confData.DbgVerboseLevel;
 
   _ERRI(0!=utesting.initialize(string(argv[1])),"Failed to initialize ModuleTesting")
+
+  info_kVerboseLevel_ = utesting.confData.DbgVerboseLevel;
 
   _ERRI(0!=utesting.execute(),"Failed to execute ModuleTesting")
 
   string testsResultString = utesting.getResult(); _CHECKRI_
 
-  cout << testsResultString << endl;
+  info_(1,testsResultString) // print result only if info_kVerboseLevel_ is >= 1 
 
   _ERRI(0!=utesting.shutdown(),"Failed to shutdown ModuleTesting")
 

@@ -148,17 +148,19 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 ◄ [Table Of Contents](#table-of-contents)
 
-Things that are expected to be added in the project over time.
+Things that are expected to be added in the project, over time.
 
-- [ ] GitHub CI pipeline (for offline runners)
-- [ ] Support for `info_(level,string)` macro
+- [ ] Support a CLI reader/analyzer integrated with vkpConfigReader.
 - [ ] Update `vkpProgressBar` (resolve some issues)
+- [ ] GitHub CI pipeline (for offline runners)
 - [ ] Easy support for integration with *OpenCV*
 - [ ] Adding some support functions
   - [ ] makeDir()
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.054)
+- [x] CECS (0.132) - including helper macro `info_(level,string)`.
 ### version (0.053)
 - [x] Document an example of adding and testing a new Module with GitLab CI (see [Documentation.pdf](Documentation.pdf) :: page 19)
 ### version (0.052)
