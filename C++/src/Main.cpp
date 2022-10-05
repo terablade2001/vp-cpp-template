@@ -33,7 +33,32 @@ using namespace vkpConfigReader;
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
 
+// Check for command line argumen '--cli'. If it exist then
+// the executable is running as CLI and no configuration
+// file is expected.
+class MainCLIReader : public vkpConfigReader::_baseDataLoader {
+  public:
+  // Boolean Directive: Set default value to 'false'.
+  // It will be set to true if the CLI argument '--cli' is detected.
+  bool cli;
+  // Custom Directive: If not added to the required CLI directives below,
+  // a default value must be set in the constructor.
+  int testId;
+  MainCLIReader() { cli=false; testId=-1;} // Set default values.
+  std::vector<std::string>& getCheckParamList() { // Add the required CLI directives (empty here)
+    static std::vector<std::string> CheckParamList = { };
+    return CheckParamList;
+  }
+  int loadDataSection(cfg_type& cfgData) { // Search and load CLI Directives
+    vkpConfigReaderLOADPARAM(cli)
+    vkpConfigReaderLOADPARAM(testId)
+    return 0;
+  }
+};
+static MainCLIReader mainCLIReader;
+
 int ModuleTesting(int argc, char** argv);
+int Test_CLIReader(int argc, char** argv);
 
 // Loading [processType] from configuration file.
 static string processType;
@@ -53,35 +78,55 @@ int main(int argc, char** argv) {
   cout << endl;
 
   try {
-    // This setup takes a configuration file and depending it's 'processType'
-    // flag it execute a specific test/development function.
-    _ERRT(2!=argc,"Use only one configuration file as parameter. Got [%i] parameters, need only 1.",argc-1)
-    _ERRT(0!=acquireTypeOfProcess(string(argv[1])),"Failed to identify the requested process type.")
-    cout << "ProcessType: " << processType << endl;
-    cout << "=======================================================================" << endl;
+    _ERRT(0!=mainCLIReader.readCommandLine(argc,argv),"Failed to parse CLI input.")
 
-    if (0==processType.compare("ModuleTesting")) {
-      _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
-    } else if (0==processType.compare("Example")) {
-      _ERRT(0!=Example(argc, argv),"Failed to run \"Example()\" function!")
-    } else if (0==processType.compare("TestExampleCAPI")) {
-      _ERRT(0!=TestExampleCAPI(argc, argv),"Failed to run \"TestExampleCAPI\" function!")
-    } else if (0==processType.compare("TestVkpCSVHandler")) {
-      _ERRT(0!=TestVkpCSVHandler(argc, argv),"Failed to run \"TestVkpCSVHandler\" function!")
-    } else {
-      _ERRSTR(1,{
-        ss << "Unknown process type: [" << processType << "]" << endl;
-        ss << "Valid Case-Sensitive process types are: "<<endl;
-        ss << " - [ModuleTesting]" << endl;
-        ss << " - [Example]" << endl;
-        ss << " - [TestExampleCAPI]" << endl;
-        ss << " - [TestVkpCSVHandler]" << endl;
-      })
-      _ERRT(1,"Abort due to unknown process type.")
+    const bool kinputIsCLI = mainCLIReader.cli; // Check's '--cli' flag in the CLI's input.
+
+    if (kinputIsCLI)
+    { // if '--cli' flag is detected, then no configuration file will be processed.
+      // Add custom code here, if you are using CLI.
+      const int kCLITestId = mainCLIReader.testId;
+      _ERRT(kCLITestId < 0,"CLI input: No '-testId' directive detected. Use '-testId 0' to run the example!")
+      if (kCLITestId == 0) {
+        _ERRT(0!=Test_CLIReader(argc, argv),"Failed to run \"Test_CLIReader\" function!")
+      } else {
+        _ERRT(1,"Unknown CLI input value: -testId = %i",kCLITestId)
+      }
+    }
+
+    else
+
+    { // If '--cli' command is missing, then we expect a configuration file!
+      // This setup takes a configuration file and depending it's 'processType'
+      // flag it execute a specific test/development function.
+      _ERRT(argc < 2,"Arguments Error:\n * The '--cli' flag was not detected -> Enabled Configuration Files mode.\n * Got [%i] CLI input arguments.\n * \t-> Use at least 1 input parameter (config. file's name).",argc-1)
+      _ERRT(0!=acquireTypeOfProcess(string(argv[1])),"Failed to identify the requested process type ('--cli' not set: Using Configuration Files mode)")
+      cout << "ProcessType: " << processType << endl;
+      cout << "=======================================================================" << endl;
+
+      if (0==processType.compare("ModuleTesting")) {
+        _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
+      } else if (0==processType.compare("Example")) {
+        _ERRT(0!=Example(argc, argv),"Failed to run \"Example()\" function!")
+      } else if (0==processType.compare("TestExampleCAPI")) {
+        _ERRT(0!=TestExampleCAPI(argc, argv),"Failed to run \"TestExampleCAPI\" function!")
+      } else if (0==processType.compare("TestVkpCSVHandler")) {
+        _ERRT(0!=TestVkpCSVHandler(argc, argv),"Failed to run \"TestVkpCSVHandler\" function!")
+      } else {
+        _ERRSTR(1,{
+          ss << "Unknown process type: [" << processType << "]" << endl;
+          ss << "Valid Case-Sensitive process types are: "<<endl;
+          ss << " - [ModuleTesting]" << endl;
+          ss << " - [Example]" << endl;
+          ss << " - [TestExampleCAPI]" << endl;
+          ss << " - [TestVkpCSVHandler]" << endl;
+        })
+        _ERRT(1,"Abort due to unknown process type.")
+      }
     }
 
     cout << "=*-*= Program completed =*-*=" << endl;
-    
+
   } catch(std::exception &e) {
     string eColorStart; string eColorFix;
 

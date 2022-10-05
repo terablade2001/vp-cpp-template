@@ -2,3 +2,12 @@
 1 1 0 moduleTests/confExample.cfg "Testing default example of vp-cpp-template where different utilities are working together as a working example."
 2 1 0 moduleTests/confTestExampleCAPI.cfg "Testing the CAPI library that is compiled as an example in vp-cpp-template project."
 3 1 1 moduleTests/confTestVkpCSVHandler.cfg "Testing the vkpCSVHandler utility."
+4 1 1 "--cli -testId 0 -frames 9 -timemsec 18.52 -confFile confFile.cfg" "Testing CLI test id 0 (Test_CLIReader())"
+5 1 1 "--enabled -testId 0 -frames 7 -timemsec 15.1 --cli -confFile confFile.cfg" "Testing CLI test id 0 (Test_CLIReader())"
+6 1 0 "-testId 0 -frames 9 -timemsec 18.52 -confFile confFile.cfg" "Testing CLI test id 0 (Test_CLIReader()): No --cli command -> should fail!"
+7 1 0 "--cli -frames 9 -timemsec 18.52 -confFile confFile.cfg" "Testing CLI test id 0 (Test_CLIReader()): Not -testId -> should fail"
+8 1 0 "--testId 1 --cli -frames 9 -timemsec 18.52 -confFile confFile.cfg" "Testing CLI test id 0 (Test_CLIReader()): Not supported -testId -> should fail"
+9 1 0 "moduleTests/confTestExampleCAPI.cfg --cli" "Testing CLI test id 0 (Test_CLIReader()): --cli command would require testId=0 too -> should fail"
+10 1 1 "moduleTests/confTestExampleCAPI.cfg -testId 0 -frames 9 --cli -timemsec 18.52" "Testing CLI test id 0 (Test_CLIReader()): Should pass. Two argv[0] should be visible"
+
+

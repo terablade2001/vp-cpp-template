@@ -167,11 +167,12 @@ void* Thread_ModuleTesting(void* _data) {
     completedEnabledTests++;
     stringstream ss;
     bool isSuccess = false;
+    const string expectedReturnStatusStr = (expectedReturnStatus==1) ? string("(+)") : string("(-)");
     if (((vReturnStatus[testIdx]==0) && (expectedReturnStatus!=0)) ||
         ((vReturnStatus[testIdx]!=0) && (expectedReturnStatus==0))) isSuccess = true;
     vReturnStatus[testIdx] = -(int)(!isSuccess);
-    if (isSuccess) { ss << "[+][Passed] TestID: ["; }
-    else { ss << "[-][Failed] TestID: ["; }
+    if (isSuccess) { ss << "[+]"<<expectedReturnStatusStr<<"[Passed] TestID: ["; }
+    else { ss << "[-]"<<expectedReturnStatusStr<<"[Failed] TestID: ["; }
     ss << testId <<"] ("<<completedEnabledTests<<" / "<<totalEnabledTests<<") :: time: "<<T.getAverageTime()<<" msec";
     info_(2,ss.str()) // Print these results only if info_kVerboseLevel_ >= 2.
   }
@@ -319,8 +320,9 @@ std::string CModuleTesting::getResult() {
   for (int i=0; i < ktotalTest; i++) {
     const auto& v = vThreadData[i];
     if (v.testEnabled <= 0) continue;
+    const string expectedReturnStatus = ((*vTestReturnStatusPtr)[i].i==1) ? string("(+)") : string("(-)");
     if (vReturnStatus[i]==0) {
-      ss <<"   [+][Passed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
+      ss <<"   [+]"<<expectedReturnStatus<<"[Passed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
       if (confData.displayPassedTestResults==true) {
         ss << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
         ss << vResultStringStream[i].str();
@@ -328,14 +330,14 @@ std::string CModuleTesting::getResult() {
       }
       if (confData.logPassedOutputFile.length() > 2) {
         logOutPassed << "\n\n\n==============================================================\n";
-        logOutPassed << "[+][Passed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
+        logOutPassed << "[+]"<<expectedReturnStatus<<"[Passed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
         logOutPassed << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
         logOutPassed << vResultStringStream[i].str();
         logOutPassed << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
       }
       passedTests++;
     } else {
-      ss <<"   [-][Failed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
+      ss <<"   [-]"<<expectedReturnStatus<<"[Failed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
       if (confData.displayFailedTestResults==true) {
         ss << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
         ss << vResultStringStream[i].str();
@@ -343,7 +345,7 @@ std::string CModuleTesting::getResult() {
       }
       if (confData.logFailedOutputFile.length() > 2) {
         logOutFailed << "\n\n\n==============================================================\n";
-        logOutFailed << "[-][Failed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
+        logOutFailed << "[-]"<<expectedReturnStatus<<"[Failed]: TestID = ["<<v.testId<<"] > "<<(*vTestDescriptionPtr)[i].s<<"\n";
         logOutFailed << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
         logOutFailed << vResultStringStream[i].str();
         logOutFailed << "   ----------------------------------------------------------------------------------------------------------------------------------\n";
@@ -400,11 +402,11 @@ int ModuleTesting(int argc, char** argv) {
 
   string testsResultString = utesting.getResult(); _CHECKRI_
 
-  info_(1,testsResultString) // print result only if info_kVerboseLevel_ is >= 1 
+  info_(1,testsResultString) // print result only if info_kVerboseLevel_ is >= 1
 
   _ERRI(0!=utesting.shutdown(),"Failed to shutdown ModuleTesting")
 
   _ERRI(utesting.failedTests != 0,"Tests Failed --> %i / %i",utesting.failedTests,(utesting.failedTests + utesting.passedTests))
-  
+
   return 0;
 }

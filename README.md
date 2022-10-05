@@ -8,7 +8,7 @@
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
   * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-**Warning**: The following notes may not be valid after **(0.053)** version...
+**Warning**: The following notes may not be valid after **(0.055)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -150,7 +150,6 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 
 Things that are expected to be added in the project, over time.
 
-- [ ] Support a CLI reader/analyzer integrated with vkpConfigReader.
 - [ ] Update `vkpProgressBar` (resolve some issues)
 - [ ] GitHub CI pipeline (for offline runners)
 - [ ] Easy support for integration with *OpenCV*
@@ -159,6 +158,17 @@ Things that are expected to be added in the project, over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.055)
+- [x] vkpLibs (0.219) - Support CLI input parsing with vkpConfigReader update (*Support a CLI reader/analyzer integrated with vkpConfigReader*).
+  - [x] vkpConfigReader can be used also without the CECS (see self-contained working example code at: `ExtLibs/vkpLibs/vkpConfigReader/test/main.cpp`)
+- [x] `Main.cpp` updated to support Module tests either via CLI input or via Configuration Files. For CLI input use `--cli` and `-testId <test number>`. The example uses `-testId 0`. For configuration files (previous behaviour) don't use the `--cli` flag.
+- [x] Module `ModuleTesting.cpp` updated to also show the actual test result. For instance the `(-)` in the result:
+  `[+](-)[Passed]: TestID = [6] > Testing CLI test id 0 (Test_CLIReader()): No --cli command -> should fail!`
+  indicates that the test is indeed failed (see generated fle `moduleTestsLog_Failed.log` ), but we expected it to fail thus it passed, and so it has the symbols `[+]`.
+- [x] Including a number of CLI unit tests, reaching up to 10 enabled tests for the whole project.
+  - [x] Setting `DbgVerboseLevel` to `1` for Modules Testing
+
+
 ### version (0.054)
 - [x] CECS (0.132) - including helper macro `info_(level,string)`.
 ### version (0.053)
