@@ -8,7 +8,7 @@
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
   * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-**Warning**: The following notes may not be valid after **(0.055)** version...
+**Warning**: The following notes may not be valid after **(0.056)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -158,6 +158,9 @@ Things that are expected to be added in the project, over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+
+### version (0.056)
+- [x] vkpLibs (0.220) - Updates regarding the vkpConfigReader and the CLI relative code (*for more info check [vkpLibs](https://github.com/terablade2001/vkpLibs) repository*)
 ### version (0.055)
 - [x] vkpLibs (0.219) - Support CLI input parsing with vkpConfigReader update (*Support a CLI reader/analyzer integrated with vkpConfigReader*).
   - [x] vkpConfigReader can be used also without the CECS (see self-contained working example code at: `ExtLibs/vkpLibs/vkpConfigReader/test/main.cpp`)
