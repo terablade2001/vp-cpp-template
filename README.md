@@ -151,6 +151,7 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2020.13 ms. (2020.13 / 1)
 
 Things that are expected to be added in the project, over time.
 
+- [ ] Adding ubuntu / win scripts to reset the project, by deleted examples etc.
 - [ ] Update `vkpProgressBar` (resolve some issues)
 - [ ] Easy support for integration with *OpenCV*
 - [ ] Adding some support functions
@@ -159,9 +160,12 @@ Things that are expected to be added in the project, over time.
 
 ## Completed TODOs - versioning
 
+### version (0.058)
+- [x] Merged Main.cpp's `MainCLIReader` and `processType` parameter (comments removed).
+- [x] Main.cpp: Parse the input first and print later via `info_()` macro based on the `-v <level>`.
+- [x] Main.cpp: use `--version` to display the version string
 ### version (0.057)
 - [x] GitHub CI pipeline (for offline runners) (see [Documentation.pdf r1v147](Documentation.pdf) :: page 19)
-
 ### version (0.056)
 - [x] vkpLibs (0.220) - Updates regarding the vkpConfigReader and the CLI relative code (*for more info check [vkpLibs](https://github.com/terablade2001/vkpLibs) repository*)
 ### version (0.055)

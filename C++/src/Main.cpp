@@ -33,36 +33,33 @@ using namespace vkpConfigReader;
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
 
-// Check for command line argumen '--cli'. If it exist then
-// the executable is running as CLI and no configuration
-// file is expected.
 class MainCLIReader : public vkpConfigReader::_baseDataLoader {
   public:
-  // Boolean Directive: Set default value to 'false'.
-  // It will be set to true if the CLI argument '--cli' is detected.
   bool cli;
-  // Custom Directive: If not added to the required CLI directives below,
-  // a default value must be set in the constructor.
   int testId;
-  MainCLIReader() { cli=false; testId=-1;} // Set default values.
-  std::vector<std::string>& getCheckParamList() { // Add the required CLI directives (empty here)
+  int v;
+  bool version;
+  std::string ProcessType;
+  MainCLIReader() { cli=false; testId=std::numeric_limits<int>::min(); ProcessType=string("-ProcessType NOT SET-"); v = 99999; version=false;}
+  std::vector<std::string>& getCheckParamList() {
     static std::vector<std::string> CheckParamList = { };
     return CheckParamList;
   }
-  int loadDataSection(cfg_type& cfgData) { // Search and load CLI Directives
+  int loadDataSection(cfg_type& cfgData) {
     vkpConfigReaderLOADPARAM(cli)
     vkpConfigReaderLOADPARAM(testId)
+    vkpConfigReaderLOADPARAM(ProcessType)
+    vkpConfigReaderLOADPARAM(v)
+    vkpConfigReaderLOADPARAM(version)
     return 0;
   }
 };
 static MainCLIReader mainCLIReader;
+static int info_kVerboseLevel_ = 99999;
 
 int ModuleTesting(int argc, char** argv);
-int Test_CLIReader(int argc, char** argv);
 
-// Loading [processType] from configuration file.
-static string processType;
-int acquireTypeOfProcess(string&& file);
+int Test_CLIReader(int argc, char** argv);
 
 int main(int argc, char** argv) {
   // Set ECS display sections, and clear default obj's errors (optional)
@@ -70,15 +67,16 @@ int main(int argc, char** argv) {
   // Enable all 32 Signals in case of CECSDEBUG flag.
   for (int i=0; i < 32; i++) _SETSIGNAL(i)
 
-  // Show program version.
-  cout << endl << "=======================================================================";
-  cout << endl << "= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =";
-  cout << endl << "= Program version: " << BV1.version << "                                            =";
-  cout << endl << "=======================================================================";
-  cout << endl;
-
   try {
     _ERRT(0!=mainCLIReader.readCommandLine(argc,argv),"Failed to parse CLI input.")
+
+    if (mainCLIReader.version) { std::cout << BV1.version << std::endl; return 0; }
+
+    info_kVerboseLevel_ = mainCLIReader.v;
+    info_(1,"\n=======================================================================")
+    info_(1,"= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =")
+    info_(1,"= Program version: " << BV1.version << "                                            =")
+    info_(1,"=======================================================================")
 
     const bool kinputIsCLI = mainCLIReader.cli; // Check's '--cli' flag in the CLI's input.
 
@@ -86,7 +84,7 @@ int main(int argc, char** argv) {
     { // if '--cli' flag is detected, then no configuration file will be processed.
       // Add custom code here, if you are using CLI.
       const int kCLITestId = mainCLIReader.testId;
-      _ERRT(kCLITestId < 0,"CLI input: No '-testId' directive detected. Use '-testId 0' to run the example!")
+      _ERRT(kCLITestId == std::numeric_limits<int>::min(),"CLI input: No '-testId' directive detected. Use i.e. '-testId 0' to run the example!")
       if (kCLITestId == 0) {
         _ERRT(0!=Test_CLIReader(argc, argv),"Failed to run \"Test_CLIReader\" function!")
       } else {
@@ -99,10 +97,13 @@ int main(int argc, char** argv) {
     { // If '--cli' command is missing, then we expect a configuration file!
       // This setup takes a configuration file and depending it's 'processType'
       // flag it execute a specific test/development function.
+      const auto& processType = mainCLIReader.ProcessType;
       _ERRT(argc < 2,"Arguments Error:\n * The '--cli' flag was not detected -> Enabled Configuration Files mode.\n * Got [%i] CLI input arguments.\n * \t-> Use at least 1 input parameter (config. file's name).",argc-1)
-      _ERRT(0!=acquireTypeOfProcess(string(argv[1])),"Failed to identify the requested process type ('--cli' not set: Using Configuration Files mode)")
-      cout << "ProcessType: " << processType << endl;
-      cout << "=======================================================================" << endl;
+      _ERRT(0!=mainCLIReader.loadConfigFile(mainCLIReader._argv[1]),"Failed to load config file [%s]",mainCLIReader._argv[1].c_str())
+      _ERRT(0==processType.compare("-ProcessType NOT SET-"),"Failed to identify the requested process type ('--cli' not set: Using Configuration Files mode)")
+
+      info_(1,"ProcessType: " << processType);
+      info_(1,"=======================================================================");
 
       if (0==processType.compare("ModuleTesting")) {
         _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
@@ -125,32 +126,15 @@ int main(int argc, char** argv) {
       }
     }
 
-    cout << "=*-*= Program completed =*-*=" << endl;
+    info_(1,"=*-*= Program completed =*-*=")
 
   } catch(std::exception &e) {
     string eColorStart; string eColorFix;
-
     // Enable the following line for colored error output
     // eColorStart = string("\033[1;36m"); eColorFix = string("\033[m");
     std::cout<< std::endl<<"(*) Exception occurred: "<< std::endl << eColorStart <<e.what()<< eColorFix << std::endl;
-
     return -1;
   }
 
-  return 0;
-}
-
-
-
-
-int acquireTypeOfProcess(string&& file) {
-  cfg_type cfg_data;
-  _ERRI(0!=cfg_LoadFile(file.c_str(), cfg_data),"Failed to load config file: [%s]",file.c_str())
-  std::vector<std::string> CheckParamList = { "ProcessType" };
-  std::string NotExistingParams;
-  int r = cfg_CheckParams(cfg_data, CheckParamList, NotExistingParams);
-  _ERRSTR(r!=0,{ ss << "The following parameters were not found: \n" << "[" << NotExistingParams << "]"; })
-  _ERRI(r!=0,"Missing parameter in configuration file [%s]",file.c_str())
-  _ERRI(0!=cfg_GetParam(cfg_data, "ProcessType", processType),"Failed to process parameters [ProcessType] in file [%s]",file.c_str())
   return 0;
 }
