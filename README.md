@@ -151,7 +151,6 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2020.13 ms. (2020.13 / 1)
 
 Things that are expected to be added in the project, over time.
 
-- [ ] Adding ubuntu / win scripts to reset the project, by deleted examples etc.
 - [ ] Update `vkpProgressBar` (resolve some issues)
 - [ ] Easy support for integration with *OpenCV*
 - [ ] Adding some support functions
@@ -160,6 +159,9 @@ Things that are expected to be added in the project, over time.
 
 ## Completed TODOs - versioning
 
+### version (0.059)
+- [x] Adding ubuntu / win scripts to reset the project, by deleted examples etc.
+  * Use `emptyProject.sh` / `emptyProject.cmd` files in BuildSystems/ subdirectories.
 ### version (0.058)
 - [x] Merged Main.cpp's `MainCLIReader` and `processType` parameter (comments removed).
 - [x] Main.cpp: Parse the input first and print later via `info_()` macro based on the `-v <level>`.

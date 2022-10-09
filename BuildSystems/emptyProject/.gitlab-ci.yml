@@ -1,0 +1,21 @@
+# vp-cpp-template CI default configuration
+# Read "Documentation.odt" (LibreOffice) for more information.
+# Regarding the build-stage adjust the number of CPUs used (2 in this example).
+
+build:
+  stage: build
+  tags:
+    - localrunner
+    - ubuntu
+  script:
+    - docker rmi localdev || true && docker build --rm -f Dockerfile_localDev --cpuset-cpus 0-1 -t localdev .
+
+test:
+  stage: test
+  tags:
+    - localrunner
+    - ubuntu
+  script:
+    - docker rm moduleTesting || true && docker run --name moduleTesting --workdir /app/workdir/ localdev ./vp-cpp-template confModuleTesting-Ubuntu.cfg
+#    - docker rm pythonTesting || true && docker run --name pythonTesting --workdir /app/python/ localdev python3 ExampleCTypes.py
+

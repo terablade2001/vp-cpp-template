@@ -1,0 +1,10 @@
+FROM cppdevbase:latest
+WORKDIR /app
+ADD . /app
+WORKDIR /app/BuildSystems/my-ubuntu64/Libs/vp-cpp-template-extlibs/
+RUN ./cmake-build.sh
+RUN ./rmake-build.sh
+WORKDIR /app/BuildSystems/my-ubuntu64/
+RUN ./cmake-build.sh
+RUN ./rmake-build.sh
+WORKDIR /app/workdir/
