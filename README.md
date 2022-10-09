@@ -8,7 +8,7 @@
 * For further documentation a new [**Documentation.odt**](Documentation.odt) file (LibreOffice) is included.
   * For the PDF version of the documentation see [Documentation.pdf](Documentation.pdf).
 
-**Warning**: The following notes may not be valid after **(0.056)** version...
+**Warning**: The following notes may not be valid after **(0.057)** version...
 
 # **What** is <u>vp-cpp-template</u>?
 
@@ -113,27 +113,28 @@ cd ../../workdir
 
 =======================================================================
 = VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =
-= Program version: [0.049]                                            =
+= Program version: [0.057]                                            =
 =======================================================================
 ProcessType: ModuleTesting
 =======================================================================
-Enabled Tests = 3 / 3
-
-------- START TESTING -------
-[+][Passed] TestID: [2] (1 / 3) :: time: 34.751 msec
-[+][Passed] TestID: [3] (2 / 3) :: time: 30.8361 msec
-[+][Passed] TestID: [1] (3 / 3) :: time: 2519.9 msec
------ TESTING COMPLETED ------
-
+Enabled Tests = 11 / 11
 
 >>>>>>> TEST RESULTS <<<<<<<
-MODULE-TESTING: Total Tests = [3]
-MODULE-TESTING: - Enabled Tests = [3]
-   [+][Passed]: TestID = [1] > Testing default example of vp-cpp-template where different utilities are working together as a working example.
-   [+][Passed]: TestID = [2] > Testing the CAPI library that is compiled as an example in vp-cpp-template project.
-   [+][Passed]: TestID = [3] > Testing the vkpCSVHandler utility.
-MODULE-TESTING: - Passed Tests = [3] out of 3
-MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
+MODULE-TESTING: Total Tests = [11]
+MODULE-TESTING: - Enabled Tests = [11]
+   [+](-)[Passed]: TestID = [1] > Testing default example of vp-cpp-template where different utilities are working together as a working example.
+   [+](-)[Passed]: TestID = [2] > Testing the CAPI library that is compiled as an example in vp-cpp-template project.
+   [+](+)[Passed]: TestID = [3] > Testing the vkpCSVHandler utility.
+   [+](+)[Passed]: TestID = [4] > Testing CLI test id 0 (Test_CLIReader())
+   [+](+)[Passed]: TestID = [5] > Testing CLI test id 0 (Test_CLIReader())
+   [+](-)[Passed]: TestID = [6] > Testing CLI test id 0 (Test_CLIReader()): No --cli command -> should fail!
+   [+](-)[Passed]: TestID = [7] > Testing CLI test id 0 (Test_CLIReader()): Not -testId -> should fail
+   [+](-)[Passed]: TestID = [8] > Testing CLI test id 0 (Test_CLIReader()): Not supported -testId -> should fail
+   [+](-)[Passed]: TestID = [9] > Testing CLI test id 0 (Test_CLIReader()): --cli command would require testId=0 too -> should fail
+   [+](+)[Passed]: TestID = [10] > Testing CLI test id 0 (Test_CLIReader()): Should pass. Two argv[0] should be visible
+   [+](+)[Passed]: TestID = [11] > Testing CLI test id 0 (Test_CLIReader()): Should pass (vkpLibs-0.220 tests)
+MODULE-TESTING: - Passed Tests = [11] out of 11
+MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2020.13 ms. (2020.13 / 1)
 >>>>>>>==============<<<<<<<
 
 =*-*= Program completed =*-*=
@@ -151,13 +152,15 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2520.63 ms. (2520.63 / 1)
 Things that are expected to be added in the project, over time.
 
 - [ ] Update `vkpProgressBar` (resolve some issues)
-- [ ] GitHub CI pipeline (for offline runners)
 - [ ] Easy support for integration with *OpenCV*
 - [ ] Adding some support functions
   - [ ] makeDir()
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+
+### version (0.057)
+- [x] GitHub CI pipeline (for offline runners) (see [Documentation.pdf r1v147](Documentation.pdf) :: page 19)
 
 ### version (0.056)
 - [x] vkpLibs (0.220) - Updates regarding the vkpConfigReader and the CLI relative code (*for more info check [vkpLibs](https://github.com/terablade2001/vkpLibs) repository*)
