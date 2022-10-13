@@ -33,12 +33,13 @@ using namespace vkpConfigReader;
 static vkpBuildVersioner BV1(1, VERSION_NUMBER);
 CECS_MAIN_MODULE("Main","CECS::Project")
 
+static int info_kVerboseLevel_ = 0;
 class MainCLIReader : public vkpConfigReader::_baseDataLoader {
   public:
-  bool cli;
-  int testId;
   int v;
+  bool cli;
   bool version;
+  int testId;
   std::string ProcessType;
   MainCLIReader() { cli=false; testId=std::numeric_limits<int>::min(); ProcessType=string("-ProcessType NOT SET-"); v = 99999; version=false;}
   std::vector<std::string>& getCheckParamList() {
@@ -46,19 +47,29 @@ class MainCLIReader : public vkpConfigReader::_baseDataLoader {
     return CheckParamList;
   }
   int loadDataSection(cfg_type& cfgData) {
+    vkpConfigReaderLOADPARAM(v)
+    info_kVerboseLevel_ = v;
     vkpConfigReaderLOADPARAM(cli)
+    vkpConfigReaderLOADPARAM(version)
     vkpConfigReaderLOADPARAM(testId)
     vkpConfigReaderLOADPARAM(ProcessType)
-    vkpConfigReaderLOADPARAM(v)
-    vkpConfigReaderLOADPARAM(version)
     return 0;
+  }
+  std::string info() {
+    stringstream ss;
+    ss << "\nApplication Arguments:\n";
+    ss << " -v[opt=0]: Verbose Level\n";
+    ss << " --cli[opt]: Enables Command Line Interface [CLI] mode. If not used, then Configuration File Mode [CFM] is used instead.\n";
+    ss << " --version[opt]: Display program version and exit.\n";
+    ss << " -testId[opt=int::min()]: [in CLI Mode]: Defines a test ID to run.\n";
+    ss << " -ProcessType[opt]: Configuration File Mode -> Set's the ProcessType selection.\n";
+    return ss.str();
   }
 };
 static MainCLIReader mainCLIReader;
-static int info_kVerboseLevel_ = 99999;
+
 
 int ModuleTesting(int argc, char** argv);
-
 int Test_CLIReader(int argc, char** argv);
 
 int main(int argc, char** argv) {
@@ -68,15 +79,18 @@ int main(int argc, char** argv) {
   for (int i=0; i < 32; i++) _SETSIGNAL(i)
 
   try {
-    _ERRT(0!=mainCLIReader.readCommandLine(argc,argv),"Failed to parse CLI input.")
+    _ERRO(0!=mainCLIReader.readCommandLine(argc,argv),{ info_(0,mainCLIReader.info()); _ERRT(1,"Errors occurred.") }, "Failed to parse CLI input.")
 
     if (mainCLIReader.version) { std::cout << BV1.version << std::endl; return 0; }
+    _CHECKRT_
 
-    info_kVerboseLevel_ = mainCLIReader.v;
-    info_(1,"\n=======================================================================")
-    info_(1,"= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =")
-    info_(1,"= Program version: " << BV1.version << "                                            =")
-    info_(1,"=======================================================================")
+    info_(0,"=======================================================================")
+    info_(0,"= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =")
+    info_(0,"= Program version: " << BV1.version << "                                            =")
+    info_(0,"=======================================================================")
+    #ifndef APP_RELEASE_MODE
+        info_(0,"* WARNING * : DEVELOPMENT MODE ...")
+    #endif
 
     const bool kinputIsCLI = mainCLIReader.cli; // Check's '--cli' flag in the CLI's input.
 
@@ -98,12 +112,13 @@ int main(int argc, char** argv) {
       // This setup takes a configuration file and depending it's 'processType'
       // flag it execute a specific test/development function.
       const auto& processType = mainCLIReader.ProcessType;
-      _ERRT(argc < 2,"Arguments Error:\n * The '--cli' flag was not detected -> Enabled Configuration Files mode.\n * Got [%i] CLI input arguments.\n * \t-> Use at least 1 input parameter (config. file's name).",argc-1)
+      _ERRO(argc < 2, { info_(0,mainCLIReader.info()); _ERRT(1,"Errors occurred.")  },"0 arguments provided.")
+      _ERRT(mainCLIReader._argv.size() <= 1,"[CFM]: Extra arguments provided [%zu] (no config. file)",mainCLIReader._argv.size()-1)
       _ERRT(0!=mainCLIReader.loadConfigFile(mainCLIReader._argv[1]),"Failed to load config file [%s]",mainCLIReader._argv[1].c_str())
-      _ERRT(0==processType.compare("-ProcessType NOT SET-"),"Failed to identify the requested process type ('--cli' not set: Using Configuration Files mode)")
+      _ERRT(0==processType.compare("-ProcessType NOT SET-"),"Failed to identify the requested process type ('--cli' not set: Using [CMF])")
 
-      info_(1,"ProcessType: " << processType);
-      info_(1,"=======================================================================");
+      info_(0,"ProcessType: " << processType);
+      info_(0,"=======================================================================");
 
       if (0==processType.compare("ModuleTesting")) {
         _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
@@ -126,7 +141,7 @@ int main(int argc, char** argv) {
       }
     }
 
-    info_(1,"=*-*= Program completed =*-*=")
+    info_(0,"=*-*= Program completed =*-*=")
 
   } catch(std::exception &e) {
     string eColorStart; string eColorFix;

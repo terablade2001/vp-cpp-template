@@ -159,6 +159,10 @@ Things that are expected to be added in the project, over time.
 
 ## Completed TODOs - versioning
 
+### version (0.060)
+- [x] All `CMakeLists.txt` files include a common `BuildConfigurations.cmake` file, where global compilation definitions can be set.
+- [x] Link with vkpLibs (0.221) and CECS (0.133): Fix in *vkpTimer* and update of *info_()* macro to also show the verbose level if it's > 0.
+- [x] Main.cpp : Rearrange the code regarding the `info_()` references.
 ### version (0.059)
 - [x] Adding ubuntu / win scripts to reset the project, by deleted examples etc.
   * Use `emptyProject.sh` / `emptyProject.cmd` files in BuildSystems/ subdirectories.

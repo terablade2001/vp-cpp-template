@@ -9,7 +9,7 @@ set (BASE_PROJECT_FOLDER "${CMAKE_CURRENT_LIST_DIR}/../..")
 
 set(CXX_FLAGS "-std=c++11 -O3 -s -Wall -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
 set(C_FLAGS "-Wall -O3 -s -Wno-unused-result -Wno-unused-variable -Wno-parentheses -D__ECSOBJ__=ECS -Ddbg_SHOW_INFO=2 -DVKP_USE_PTHREAD_POOL")
-
+include("${BASE_PROJECT_FOLDER}/BuildSystems/BuildConfigurations.cmake")
 
 set(CMAKE_CONFIGURATION_TYPES "Release")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${CXX_FLAGS}")
