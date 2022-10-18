@@ -68,8 +68,8 @@ int ModuleTesting_sysexec(const char* cmd, int testIdx) {
         return -2;
         break;
       }
-      if (0==result.compare(testSuccessCompletionString)) returnStatus = 0;
-	}
+      if (std::string::npos!=result.find(testSuccessCompletionString)) returnStatus = 0;
+    }
   } catch (std::exception& e) { returnStatus = -8; }
 	return 0;
 }

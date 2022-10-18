@@ -159,6 +159,8 @@ Things that are expected to be added in the project, over time.
 
 ## Completed TODOs - versioning
 
+### version (0.061)
+- [x] At `ModuleTesting.cpp`, find() instead of compare() is used, as `info_()` may also print verbose level.
 ### version (0.060)
 - [x] All `CMakeLists.txt` files include a common `BuildConfigurations.cmake` file, where global compilation definitions can be set.
 - [x] Link with vkpLibs (0.221) and CECS (0.133): Fix in *vkpTimer* and update of *info_()* macro to also show the verbose level if it's > 0.
