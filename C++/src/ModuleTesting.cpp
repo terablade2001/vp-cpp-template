@@ -33,9 +33,13 @@ CECS_MODULE("ModuleTesting")
 
 static vector<stringstream> vResultStringStream;
 static vector<int> vReturnStatus;
+static vector<vector<int>> vvDependsOn;
+static vector<int> vUsedTestIds;
+static vector<bool> vCompletedTest;
 static vector<float> vTestTimeInMSec;
 static string testSuccessCompletionString;
 static int info_kVerboseLevel_ = -1;
+static vector<int> vTestsExecutionOrder;
 
 
 
@@ -49,16 +53,16 @@ static int info_kVerboseLevel_ = -1;
 int ModuleTesting_sysexec(const char* cmd, int testIdx) {
   stringstream& ss = vResultStringStream[testIdx]; ss.str("");
   int& returnStatus = vReturnStatus[testIdx];
-	std::array<char, 1024> buffer;
-	std::string result;
-	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+  std::array<char, 1024> buffer;
+  std::string result;
+  std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
 
   returnStatus = -1;
   try {
-  _ERRO(!pipe, {returnStatus = -9999; return -1; }, "Failed to open system pip() with command: [%s]", cmd)
+    _ERRO(!pipe, {returnStatus = -9999; return -1; }, "Failed to open system pip() with command: [%s]", cmd)
 
-	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-			result = buffer.data();
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+      result = buffer.data();
       auto p = result.rfind("\n");
       if (p != string::npos) result = result.substr(0,p);
       ss << result << endl;
@@ -71,7 +75,7 @@ int ModuleTesting_sysexec(const char* cmd, int testIdx) {
       if (std::string::npos!=result.find(testSuccessCompletionString)) returnStatus = 0;
     }
   } catch (std::exception& e) { returnStatus = -8; }
-	return 0;
+  return 0;
 }
 
 
@@ -159,23 +163,46 @@ void* Thread_ModuleTesting(void* _data) {
   int expectedReturnStatus = data->expectedReturnStatus;
   const string& command = data->command;
   _CERRO({return NULL;},"Test-#%i Failed before start!: Errors already captured", testIdx)
+
+  // Check for Depended Tasks. Activate execution if all task on which this depends on have been completed.
+  bool canBeExecuted = true;
+  { std::lock_guard<std::mutex> lock(qmtx);
+    // Check if the task has been already executed. If yes, ignore it.
+    if (vCompletedTest[testIdx]) return NULL;
+    // Identify possible task dependencies
+    vector<int>& dependsOn = vvDependsOn[testIdx];
+    if (dependsOn[0] >= 0) { // If we have task dependencies, check if they have finished.
+      for (const auto v : dependsOn) {
+        int index = 0; for (const int p : vUsedTestIds) { if (p == v) break; index++; } // Identify Index from TaskId
+        if (!vCompletedTest[index]) { canBeExecuted = false; break; }
+      }
+    }
+  }
+  if (!canBeExecuted) return NULL;
+
   vkpTimer T;
   T.start();
   ModuleTesting_sysexec(command.c_str(), testIdx);
   T.stop();
+
   { std::lock_guard<std::mutex> lock(qmtx);
     completedEnabledTests++;
-    stringstream ss;
     bool isSuccess = false;
     const string expectedReturnStatusStr = (expectedReturnStatus==1) ? string("(+)") : string("(-)");
     if (((vReturnStatus[testIdx]==0) && (expectedReturnStatus!=0)) ||
         ((vReturnStatus[testIdx]!=0) && (expectedReturnStatus==0))) isSuccess = true;
     vReturnStatus[testIdx] = -(int)(!isSuccess);
-    if (isSuccess) { ss << "[+]"<<expectedReturnStatusStr<<"[Passed] TestID: ["; }
-    else { ss << "[-]"<<expectedReturnStatusStr<<"[Failed] TestID: ["; }
-    ss << testId <<"] ("<<completedEnabledTests<<" / "<<totalEnabledTests<<") :: time: "<<T.getAverageTime()<<" msec";
-    info_(2,ss.str()) // Print these results only if info_kVerboseLevel_ >= 2.
+    if (info_kVerboseLevel_ >= 2) {
+      stringstream ss;
+      if (isSuccess) { ss << "[+]"<<expectedReturnStatusStr<<"[Passed] TestID: ["; }
+      else { ss << "[-]"<<expectedReturnStatusStr<<"[Failed] TestID: ["; }
+      ss << testId <<"] ("<<completedEnabledTests<<" / "<<totalEnabledTests<<") :: time: "<<T.getAverageTime()<<" msec";
+      info_(2,ss.str()) // Print these results only if info_kVerboseLevel_ >= 2.
+    }
+    vCompletedTest[testIdx] = true;
+    vTestsExecutionOrder.push_back(testId);
   }
+
   return NULL;
 }
 
@@ -215,6 +242,7 @@ class CModuleTesting {
   vector<vkpCSVHandlerData>* vTestIDPtr;
   vector<vkpCSVHandlerData>* vTestEnabledPtr;
   vector<vkpCSVHandlerData>* vTestReturnStatusPtr;
+  vector<vkpCSVHandlerData>* vTestDependsOnPtr;
   vector<vkpCSVHandlerData>* vTestConfigFilePtr;
   vector<vkpCSVHandlerData>* vTestDescriptionPtr;
 }; // class ModuleTesting
@@ -225,9 +253,12 @@ CModuleTesting::CModuleTesting(){
   vTestDescriptionPtr = nullptr;
 }
 
+
 CModuleTesting::~CModuleTesting(){
   shutdown();
 }
+
+
 
 
 int CModuleTesting::initialize(std::string confFile) {
@@ -239,7 +270,7 @@ int CModuleTesting::initialize(std::string confFile) {
   _ERRI(0!=TPool.Initialize(Thread_ModuleTesting, kThreadsToUseForParallelTests, -1),"Failed to initialize thread pool")
 
   _ERRI(0!=csv.Initialize(" ","\""), "Initialize error.")
-  vector<unsigned char> headerTypes{0, 0, 0, 2, 2};
+  vector<unsigned char> headerTypes{0, 0, 0, 2, 2, 2};
   _ERRI(0!=csv.setHeaders(headerTypes),"Failed to set datatypes of headers")
   _ERRI(0!=csv.loadFile(confData.unitTestCSVFile, false),"Failed to load [%s] file.",confData.unitTestCSVFile.c_str())
 
@@ -247,19 +278,42 @@ int CModuleTesting::initialize(std::string confFile) {
   _ERRI(0!=csv.getDataColumnPtr((size_t)0,vTestIDPtr),"Failed to access first column")
   _ERRI(0!=csv.getDataColumnPtr((size_t)1,vTestEnabledPtr),"Failed to access second column")
   _ERRI(0!=csv.getDataColumnPtr((size_t)2,vTestReturnStatusPtr),"Failed to access third column")
-  _ERRI(0!=csv.getDataColumnPtr((size_t)3,vTestConfigFilePtr),"Failed to access fourth column")
-  _ERRI(0!=csv.getDataColumnPtr((size_t)4,vTestDescriptionPtr),"Failed to access fifth column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)3,vTestDependsOnPtr),"Failed to access fourth column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)4,vTestConfigFilePtr),"Failed to access fifth column")
+  _ERRI(0!=csv.getDataColumnPtr((size_t)5,vTestDescriptionPtr),"Failed to access sixth column")
   _ERRI(vTestIDPtr==nullptr,"vTestIDPtr==nullptr")
   _ERRI(vTestEnabledPtr==nullptr,"vTestEnabledPtr==nullptr")
   _ERRI(vTestReturnStatusPtr==nullptr,"vTestReturnStatusPtr==nullptr")
+  _ERRI(vTestDependsOnPtr==nullptr,"vTestDependsOnPtr==nullptr")
   _ERRI(vTestConfigFilePtr==nullptr,"vTestConfigFilePtr==nullptr")
   _ERRI(vTestDescriptionPtr==nullptr,"vTestDescriptionPtr==nullptr")
 
-  // Generate test for the threads.
   const int ktotalTests = vTestIDPtr->size();
+  vUsedTestIds.clear();
+  for (const auto& test : *vTestIDPtr) { vUsedTestIds.push_back(test.i); }
+  // Search and convert all Task Dependencies to integers
+  for (size_t idx = 0; idx < vTestDependsOnPtr->size(); idx++) {
+    string& s = (*vTestDependsOnPtr)[idx].s;
+    const auto currTaskId = (*vTestIDPtr)[idx].i;
+    vector<int> dependencesTaskIds;
+    _ERRI(0!=cfg_convertToVector<int>(s,dependencesTaskIds),"Failed to convert string [%s] to integers",s)
+    _ERRI((dependencesTaskIds.size() > 1) && (dependencesTaskIds[0] < 0),"Task [%i] depends on -1 and other tasks! -> [%s]",currTaskId, s.c_str())
+    if (dependencesTaskIds[0] >= 0) { // if we have tasks on which the current task is depending on...
+      for (const int depId : dependencesTaskIds) { // for every such task, confirm it's enabled for testing...
+        _ERRI(depId < 0,"Task [%i] depends on -1 and other tasks! -> [%s]",currTaskId, s.c_str())
+        int index = 0; for (const int p : vUsedTestIds) { if (p == depId) break; index++; }
+        _ERRI((*vTestEnabledPtr)[index].i <= 0,"Task [%i] depends on Task [%i] which is disabled!", currTaskId, depId)
+      }
+    }
+    vvDependsOn.push_back(std::move(dependencesTaskIds));
+  }
+
+  // Generate test for the threads.
+  vTestsExecutionOrder.clear();
   vThreadData.resize(ktotalTests);
   vResultStringStream.resize(ktotalTests);
   vReturnStatus.resize(ktotalTests);
+  vCompletedTest.resize(ktotalTests, false);
   vTestTimeInMSec.resize(ktotalTests,0);
   for (int testIdx = 0; testIdx < ktotalTests; testIdx++) {
     const int ktestId = (*vTestIDPtr)[testIdx].i;
@@ -274,6 +328,9 @@ int CModuleTesting::initialize(std::string confFile) {
   return 0;
 }
 
+
+
+
 int CModuleTesting::execute() {
   totalEnabledTests = 0;
   for (auto& v : vThreadData) {
@@ -284,16 +341,24 @@ int CModuleTesting::execute() {
   info_(2,"\n------- START TESTING -------")
   completedEnabledTests = 0;
   totalTestTime.start();
-  for (auto& v : vThreadData) {
-    if (v.testEnabled > 0) {
-      TPool.AddTask(&v);
+  int itersCount = 0;
+  while (completedEnabledTests < totalEnabledTests) {
+    // dbg_(63,"itersCount: "<<itersCount<<", completedEnabledTests: "<<completedEnabledTests)
+    for (auto& v : vThreadData) {
+      if (v.testEnabled > 0) {
+        TPool.AddTask(&v);
+      }
     }
+    TPool.Wait();
+    _ERRI(itersCount++ > 1e6, "Too many loop iterations. Something may be wrong...")
   }
-  TPool.Wait();
   totalTestTime.stop();
   info_(2,"----- TESTING COMPLETED ------\n")
   return 0;
 }
+
+
+
 
 std::string CModuleTesting::getResult() {
   _ERRO(vTestDescriptionPtr==nullptr,{ return string("ERROR"); }, "vTestDescriptionPtr==nullptr")
@@ -358,9 +423,16 @@ std::string CModuleTesting::getResult() {
     ss << "MODULE-TESTING: - Failed Tests = ["<<failedTests<<"] out of "<<enabledTests<<"\n";
   }
   ss << "MODULE-TESTING: "<<totalTestTime.str()<<"\n";
+  ss << "MODULE-TESTING: - Tests Execution Order: [";
+  for (size_t i = 0; i < vTestsExecutionOrder.size()-1; i++) {
+    ss << vTestsExecutionOrder[i] <<",";
+  } ss << vTestsExecutionOrder.back()<<"]\n";
   ss << ">>>>>>>==============<<<<<<<"<<std::endl;
   return ss.str();
 }
+
+
+
 
 int CModuleTesting::shutdown() {
   TPool.Shutdown();
@@ -386,11 +458,11 @@ int CModuleTesting::shutdown() {
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 int ModuleTesting(int argc, char** argv) {
-	static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
-	*(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
-	CECS_SETFUNC_LOCK( [](){ pthread_mutex_lock(*(pthread_mutex_t**)CECS_MUTEXPTR);} );
-	CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
-	_CHECKRI_
+  static pthread_mutex_t q_mtx_CECS = PTHREAD_MUTEX_INITIALIZER;
+  *(pthread_mutex_t**)CECS_MUTEXPTR = &q_mtx_CECS;
+  CECS_SETFUNC_LOCK( [](){ pthread_mutex_lock(*(pthread_mutex_t**)CECS_MUTEXPTR);} );
+  CECS_SETFUNC_UNLOCK( [](){ pthread_mutex_unlock(*(pthread_mutex_t**)CECS_MUTEXPTR);});
+  _CHECKRI_
 
   CModuleTesting utesting;
 

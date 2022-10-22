@@ -1,2 +1,5 @@
-"Test ID" " Enabled" "Result Status" "Configuration File" Description
-1 1 1 "--cli -t 0 -v 2" "newModule cli test"
+"Test ID" " Enabled" "Result Status" "Depends On" "Configuration File" Description
+1 1 1 4,3,2 "--cli -t 0 -v 2 -e 0" "newModule cli test - Test depends on 4,3 and 2 tests"
+2 1 1 3,4 "--cli -t 0 -v 2 -e 1" "newModule cli test - Test depends on 3 and 4 tests"
+3 1 1 -1 "--cli -t 0 -v 2 -e 2" "newModule cli test - This should be the first test"
+4 1 1 3 "--cli -t 0 -v 2 -e 3" "newModule cli test - Test depends on test 3"
