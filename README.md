@@ -158,7 +158,8 @@ Things that are expected to be added in the project, over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
-
+### version (0.062)
+- [x] Minor fix at `Main.cpp` of folder `emptyProject/`. Fix to use by default `info_(0,...)` instead of `info(1,...)`.
 ### version (0.061)
 - [x] At `ModuleTesting.cpp`, find() instead of compare() is used, as `info_()` may also print verbose level.
 ### version (0.060)

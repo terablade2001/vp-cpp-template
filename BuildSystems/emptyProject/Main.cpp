@@ -69,10 +69,11 @@ int main(int argc, char** argv) {
     if (mainCLIReader.version) { std::cout << BV1.version << std::endl; return 0; }
 
     info_kVerboseLevel_ = mainCLIReader.v;
-    info_(1,"\n=======================================================================")
-    info_(1,"= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =")
-    info_(1,"= Program version: " << BV1.version << "                                            =")
-    info_(1,"=======================================================================")
+    info_(0,"")
+    info_(0,"=======================================================================")
+    info_(0,"= VP-CPP-TEMPLATE (https://github.com/terablade2001/vp-cpp-template)  =")
+    info_(0,"= Program version: " << BV1.version << "                                            =")
+    info_(0,"=======================================================================")
 
     const bool kinputIsCLI = mainCLIReader.cli;
 
@@ -93,8 +94,8 @@ int main(int argc, char** argv) {
       _ERRT(0!=mainCLIReader.loadConfigFile(mainCLIReader._argv[1]),"Failed to load config file [%s]",mainCLIReader._argv[1].c_str())
       _ERRT(0==processType.compare("-ProcessType NOT SET-"),"Failed to identify the requested process type ('--cli' not set: Using Configuration Files mode)")
 
-      info_(1,"ProcessType: " << processType);
-      info_(1,"=======================================================================");
+      info_(0,"ProcessType: " << processType);
+      info_(0,"=======================================================================");
 
       if (0==processType.compare("ModuleTesting")) {
         _ERRT(0!=ModuleTesting(argc, argv),"Function \"ModuleTesting()\" failed!")
@@ -108,7 +109,7 @@ int main(int argc, char** argv) {
       }
     }
 
-    info_(1,"=*-*= Program completed =*-*=")
+    info_(0,"=*-*= Program completed =*-*=")
 
   } catch(std::exception &e) {
     string eColorStart; string eColorFix;
