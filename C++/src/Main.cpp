@@ -24,6 +24,7 @@
 #include "ModuleTests/include/Example.hpp"
 #include "ModuleTests/include/TestExampleCAPI.hpp"
 #include "ModuleTests/include/TestVkpCSVHandler.hpp"
+#include "ModuleTests/include/TestOpenCV.hpp"
 
 using namespace std;
 using namespace vkp;
@@ -89,7 +90,7 @@ int main(int argc, char** argv) {
     info_(0,"= Program version: " << BV1.version << "                                            =")
     info_(0,"=======================================================================")
     #ifndef APP_RELEASE_MODE
-        info_(0,"* WARNING * : DEVELOPMENT MODE ...")
+      info_(0,"* WARNING * : DEVELOPMENT MODE ...")
     #endif
 
     const bool kinputIsCLI = mainCLIReader.cli; // Check's '--cli' flag in the CLI's input.
@@ -101,6 +102,8 @@ int main(int argc, char** argv) {
       _ERRT(kCLITestId == std::numeric_limits<int>::min(),"CLI input: No '-testId' directive detected. Use i.e. '-testId 0' to run the example!")
       if (kCLITestId == 0) {
         _ERRT(0!=Test_CLIReader(argc, argv),"Failed to run \"Test_CLIReader\" function!")
+      } else if (kCLITestId == 1) {
+        _ERRT(0!=Test_OpenCV(argc, argv),"Failed to run \"Test_OpenCV\" function!")
       } else {
         _ERRT(1,"Unknown CLI input value: -testId = %i",kCLITestId)
       }

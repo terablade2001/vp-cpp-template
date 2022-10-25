@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8.11)
 
 set(PROJECTNAME "vp-cpp-template-extlibs")
-set(LINK_OPTIONS "-pthread")
 
 project(${PROJECTNAME})
 message(WARNING "[CMAKE_CURRENT_LIST_DIR] = ${CMAKE_CURRENT_LIST_DIR}")
@@ -43,4 +42,5 @@ file(GLOB CXX_SRCS
 )
 
 add_library(${PROJECTNAME} SHARED ${CXX_SRCS} ${C_SRCS})
+set(LINK_OPTIONS "-pthread" ${LINK_OPTIONS})
 target_link_libraries(${PROJECTNAME} ${LINK_OPTIONS})

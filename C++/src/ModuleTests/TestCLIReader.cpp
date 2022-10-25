@@ -48,7 +48,7 @@ class TestCLIReaderCLIReader : public vkpConfigReader::_baseDataLoader {
   }
 };
 
-TestCLIReaderCLIReader confCLI;
+static TestCLIReaderCLIReader confCLI;
 
 
 int Test_CLIReader(int argc, char** argv) {

@@ -152,12 +152,13 @@ MODULE-TESTING: - Timer [Total Testing Time]: Avg = 2020.13 ms. (2020.13 / 1)
 Things that are expected to be added in the project, over time.
 
 - [ ] Update `vkpProgressBar` (resolve some issues)
-- [ ] Easy support for integration with *OpenCV*
 - [ ] Adding some support functions
   - [ ] makeDir()
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
+### version (0.064)
+- [x] Easy support for integration with *OpenCV*. Read [Documentation](Documentation.pdf) for more info.
 ### version (0.063)
 - [x] Updated the `ModuleTesting.cpp` to support execution ordering of Tests. This is useful for the cases where some tests depends on other test's results. The execution order can be defined in a new column on the CSV file called `Depends On`. The value of `-1` means no dependency, while multiple tests Ids can be used separated with comma. Check the default `moduleTestsList.csv` file for examples.
 ### version (0.062)
