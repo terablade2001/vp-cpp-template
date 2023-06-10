@@ -157,8 +157,9 @@ Things that are expected to be added in the project, over time.
   - [ ] Support functions for *OpenCV*
 
 ## Completed TODOs - versioning
-### version (0.064)
+### versions (0.064) - (0.066)
 - [x] Easy support for integration with *OpenCV*. Read [Documentation](Documentation.pdf) for more info.
+- [x] Updated Links with vkpLibs(0.222) and CCEXP(0.108)
 ### version (0.063)
 - [x] Updated the `ModuleTesting.cpp` to support execution ordering of Tests. This is useful for the cases where some tests depends on other test's results. The execution order can be defined in a new column on the CSV file called `Depends On`. The value of `-1` means no dependency, while multiple tests Ids can be used separated with comma. Check the default `moduleTestsList.csv` file for examples.
 ### version (0.062)
